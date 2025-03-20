@@ -15,7 +15,7 @@ var connectionString =
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
 
-var frontendUrl = "http://localhost:3000";
+var frontendUrl = "http://localhost:5173";
 
 builder.Services.AddSwaggerGen();
 builder.Services.AddCors(options =>
@@ -28,19 +28,26 @@ builder.Services.AddCors(options =>
 });
 
 
-builder.Services.AddScoped<IApplicationDbContext, ApplicationDbContext>();
+builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 builder.Services.AddScoped<ICursoService, CursoService>();
+builder.Services.AddScoped<IProfessorService, ProfessorService>();
+builder.Services.AddScoped<IModuloService, ModuloService>();
+builder.Services.AddScoped<IContactService, ContactService>();
 
 builder.Services.AddAuthentication();
 builder.Services.AddAuthorization();
 builder.Services.AddAutoMapper(typeof(CursoProfile));
 builder.Services.AddControllers();
+builder.Services.AddProblemDetails();
 
 
 var app = builder.Build();
 
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.UseExceptionHandler();
+app.UseStatusCodePages();
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
@@ -50,7 +57,7 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 
 app.UseRouting();
-app.UseCors();
+app.UseCors("FrontendPolicy");
 app.UseAuthorization();
 app.MapControllers(); 
 

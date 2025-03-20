@@ -4,6 +4,7 @@ using Infrastucture;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace webAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250226185956_NewCreateMigration")]
+    partial class NewCreateMigration
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,8 +35,9 @@ namespace webAPI.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(200)");
 
-                    b.Property<Guid>("Id_Modulo")
-                        .HasColumnType("char(36)");
+                    b.Property<string>("Id_Modulo")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
                     b.Property<Guid>("ModuloId")
                         .HasColumnType("char(36)");
@@ -51,29 +55,6 @@ namespace webAPI.Migrations
                     b.HasIndex("ModuloId");
 
                     b.ToTable("Aulas");
-                });
-
-            modelBuilder.Entity("Domain.Models.Contact", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("Varchar(254)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("Varchar(100)");
-
-                    b.Property<string>("Phone")
-                        .IsRequired()
-                        .HasColumnType("Varchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("Domain.Models.CursoProfessor", b =>
@@ -97,37 +78,41 @@ namespace webAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("longtext");
+                    b.Property<Guid>("CursoId")
+                        .HasColumnType("char(36)");
 
                     b.Property<string>("EndDate")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(200)");
 
-                    b.Property<Guid>("Id_Curso")
-                        .HasColumnType("char(36)");
+                    b.Property<string>("Id_Curso")
+                        .IsRequired()
+                        .HasColumnType("longtext");
 
-                    b.Property<Guid>("Id_Professor")
+                    b.Property<string>("Id_Professor")
+                        .IsRequired()
+                        .HasColumnType("longtext");
+
+                    b.Property<Guid>("ProfessorId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("StartDate")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<string>("Theme")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("WorkLoad")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(200)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Id_Curso");
+                    b.HasIndex("CursoId");
 
-                    b.HasIndex("Id_Professor");
+                    b.HasIndex("ProfessorId");
 
                     b.ToTable("Modulos");
                 });
@@ -137,10 +122,6 @@ namespace webAPI.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
-
-                    b.Property<string>("ImagemUrl")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("MiniResume")
                         .IsRequired()
@@ -161,44 +142,28 @@ namespace webAPI.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("CashPrice")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
-
                     b.Property<Guid>("CoordenadorId")
                         .HasColumnType("char(36)");
 
                     b.Property<string>("Curriculum")
                         .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Discount")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("Documentation")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<string>("Duration")
                         .IsRequired()
-                        .HasColumnType("varchar(500)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Faculty")
                         .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("FullPrice")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                        .HasColumnType("varchar(500)");
 
                     b.Property<string>("ImagemUrl")
                         .IsRequired()
                         .HasColumnType("longtext");
-
-                    b.Property<string>("Installments")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -210,40 +175,36 @@ namespace webAPI.Migrations
 
                     b.Property<string>("MonthlyPrice")
                         .IsRequired()
-                        .HasColumnType("varchar(64)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(50)");
 
-                    b.Property<string>("Presentation")
+                    b.Property<string>("PedagogicalCoordination")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<string>("Proposal")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<string>("RegistrationPrice")
                         .IsRequired()
-                        .HasColumnType("varchar(64)");
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Requirements")
                         .IsRequired()
-                        .HasColumnType("longtext");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<string>("StartForecast")
                         .IsRequired()
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("varchar(200)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
 
                     b.Property<string>("TotalPrice")
-                        .IsRequired()
-                        .HasColumnType("varchar(64)");
-
-                    b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
@@ -292,13 +253,13 @@ namespace webAPI.Migrations
                 {
                     b.HasOne("webAPI.Domain.Models.Curso", "Curso")
                         .WithMany("Modulos")
-                        .HasForeignKey("Id_Curso")
+                        .HasForeignKey("CursoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Domain.Models.Professor", "Professor")
                         .WithMany("Modulos")
-                        .HasForeignKey("Id_Professor")
+                        .HasForeignKey("ProfessorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 

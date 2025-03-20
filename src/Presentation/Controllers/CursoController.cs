@@ -1,4 +1,3 @@
-using System;
 using Microsoft.AspNetCore.Mvc;
 using Application.Interfaces;
 
@@ -27,12 +26,32 @@ namespace webAPI.Presentation.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetCursoByIdAsync(Guid id)
         {
-            var curso = await _cursoService.GetCursoByIdAsync(id);
+           
+            try
+            {
+                var curso = await _cursoService.GetCursoByIdAsync(id);
 
-            if(curso == null)
-                return NotFound("Curso não encontrado.");
+                if (curso is null)
+                {
+                    return NotFound(new ProblemDetails
+                    {
+                        Title = "Curso não encontrado",
+                        Detail = $"O curso com ID {id} não foi encontrado.",
+                        Status = 404
+                    });
+                }
 
-            return Ok(curso);
+                return Ok(curso);
+            }
+                catch (Exception ex)
+                {
+                    return StatusCode(500, new ProblemDetails
+                    {
+                        Title = "Ocorreu um erro na sua solicitação, tente novamente.",
+                        Detail = ex.Message,
+                        Status = 500
+                    });
+                }
         }
     }
 }

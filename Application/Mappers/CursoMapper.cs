@@ -1,6 +1,4 @@
-using System;
 using AutoMapper;
-using Domain;
 using Application.DTOs;
 using webAPI.Domain.Models;
 
