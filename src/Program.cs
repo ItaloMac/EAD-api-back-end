@@ -3,6 +3,7 @@ using Application.Services;
 using Microsoft.EntityFrameworkCore;
 using Infrastucture;
 using Application.Mappers;
+using Microsoft.AspNetCore.Identity;
 using Swashbuckle.AspNetCore.Swagger;
 
 
@@ -26,7 +27,6 @@ builder.Services.AddCors(options =>
               .WithHeaders("Content-Type", "Authorization"); //
     });
 });
-
 
 builder.Services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<ApplicationDbContext>());
 builder.Services.AddScoped<ICursoService, CursoService>();

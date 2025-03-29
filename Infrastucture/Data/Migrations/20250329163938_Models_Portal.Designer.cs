@@ -4,6 +4,7 @@ using Infrastucture;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace webAPI.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250329163938_Models_Portal")]
+    partial class Models_Portal
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,41 +24,6 @@ namespace webAPI.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
-
-            modelBuilder.Entity("Address", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("CEP")
-                        .IsRequired()
-                        .HasColumnType("varchar(12)");
-
-                    b.Property<string>("City")
-                        .IsRequired()
-                        .HasColumnType("varchar(64)");
-
-                    b.Property<string>("Neighborhood")
-                        .IsRequired()
-                        .HasColumnType("varchar(64)");
-
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
-
-                    b.Property<string>("Road")
-                        .IsRequired()
-                        .HasColumnType("varchar(64)");
-
-                    b.Property<string>("State")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Address");
-                });
 
             modelBuilder.Entity("Domain.Models.Aula", b =>
                 {
@@ -86,32 +54,6 @@ namespace webAPI.Migrations
                     b.HasIndex("ModuloId");
 
                     b.ToTable("Aulas");
-                });
-
-            modelBuilder.Entity("Domain.Models.Class", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<Guid?>("CursoId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("varchar(64)");
-
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CursoId");
-
-                    b.ToTable("Class");
                 });
 
             modelBuilder.Entity("Domain.Models.Contact", b =>
@@ -214,128 +156,6 @@ namespace webAPI.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Professores");
-                });
-
-            modelBuilder.Entity("Domain.Models.Registration", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("CancellationDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<Guid>("ClassId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime>("RegistrationDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("RegistrationStatus")
-                        .IsRequired()
-                        .HasColumnType("varchar(10)");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<string>("VindiPlanId")
-                        .HasColumnType("varchar(64)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClassId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("Registration");
-                });
-
-            modelBuilder.Entity("Domain.Models.User", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("char(36)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<Guid?>("AddressId")
-                        .HasColumnType("char(36)");
-
-                    b.Property<DateTime?>("BirthDate")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("CPF")
-                        .IsRequired()
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("varchar(255)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("ProfilePhoto")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("longtext");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("tinyint(1)");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("UserType")
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("VindiCustomerId")
-                        .HasColumnType("longtext");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AddressId");
-
-                    b.HasIndex("CPF")
-                        .IsUnique();
-
-                    b.HasIndex("Email")
-                        .IsUnique();
-
-                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("webAPI.Domain.Models.Curso", b =>
@@ -452,15 +272,6 @@ namespace webAPI.Migrations
                     b.Navigation("Modulo");
                 });
 
-            modelBuilder.Entity("Domain.Models.Class", b =>
-                {
-                    b.HasOne("webAPI.Domain.Models.Curso", "Curso")
-                        .WithMany()
-                        .HasForeignKey("CursoId");
-
-                    b.Navigation("Curso");
-                });
-
             modelBuilder.Entity("Domain.Models.CursoProfessor", b =>
                 {
                     b.HasOne("webAPI.Domain.Models.Curso", "Curso")
@@ -499,34 +310,6 @@ namespace webAPI.Migrations
                     b.Navigation("Professor");
                 });
 
-            modelBuilder.Entity("Domain.Models.Registration", b =>
-                {
-                    b.HasOne("Domain.Models.Class", "Class")
-                        .WithMany("Registrations")
-                        .HasForeignKey("ClassId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Domain.Models.User", "User")
-                        .WithMany("Registrations")
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Class");
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("Domain.Models.User", b =>
-                {
-                    b.HasOne("Address", "Address")
-                        .WithMany()
-                        .HasForeignKey("AddressId");
-
-                    b.Navigation("Address");
-                });
-
             modelBuilder.Entity("webAPI.Domain.Models.Curso", b =>
                 {
                     b.HasOne("Domain.Models.Professor", "Coordenador")
@@ -536,11 +319,6 @@ namespace webAPI.Migrations
                         .IsRequired();
 
                     b.Navigation("Coordenador");
-                });
-
-            modelBuilder.Entity("Domain.Models.Class", b =>
-                {
-                    b.Navigation("Registrations");
                 });
 
             modelBuilder.Entity("Domain.Models.Modulo", b =>
@@ -555,11 +333,6 @@ namespace webAPI.Migrations
                     b.Navigation("CursosCoordenados");
 
                     b.Navigation("Modulos");
-                });
-
-            modelBuilder.Entity("Domain.Models.User", b =>
-                {
-                    b.Navigation("Registrations");
                 });
 
             modelBuilder.Entity("webAPI.Domain.Models.Curso", b =>

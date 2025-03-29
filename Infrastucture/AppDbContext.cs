@@ -17,29 +17,38 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
     public DbSet<Professor> Professores { get; set; }
     public DbSet<CursoProfessor> CursoProfessores { get; set; }
     public DbSet<Contact> Contacts { get; set; }
-
-    
+    public DbSet<Address> Addresses { get; set; }
+    public DbSet<User> User { get; set; }
+    public DbSet<Registration> Registrations { get; set; }
+    public DbSet<Class> Classes { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         // Configuração do relacionamento N:N entre Curso e Professor (CursoProfessor)
         modelBuilder.Entity<CursoProfessor>()
-            .HasKey(cp => new { cp.Id_Curso, cp.Id_Professor }); // Define a chave composta
-
+            .HasKey(cp => new { cp.Id_Curso, cp.Id_Professor });
         modelBuilder.Entity<CursoProfessor>()
             .HasOne(cp => cp.Curso)
-            .WithMany(c => c.CursoProfessores) // ⬅️ Ajustado para refletir a tabela intermediária
+            .WithMany(c => c.CursoProfessores)
             .HasForeignKey(cp => cp.Id_Curso);
 
         modelBuilder.Entity<CursoProfessor>()
             .HasOne(cp => cp.Professor)
-            .WithMany(p => p.CursoProfessores) // ⬅️ Ajustado para refletir a tabela intermediária
+            .WithMany(p => p.CursoProfessores)
             .HasForeignKey(cp => cp.Id_Professor);
 
         modelBuilder.Entity<Curso>()
-            .HasOne(c => c.Coordenador)  // Curso tem um coordenador
-            .WithMany(p => p.CursosCoordenados)  // Professor pode coordenar vários cursos
-            .HasForeignKey(c => c.CoordenadorId)  // A chave estrangeira
+            .HasOne(c => c.Coordenador)
+            .WithMany(p => p.CursosCoordenados)
+            .HasForeignKey(c => c.CoordenadorId)
             .OnDelete(DeleteBehavior.Cascade);
+
+         modelBuilder.Entity<User>()
+        .HasIndex(u => u.Email)
+        .IsUnique();
+
+          modelBuilder.Entity<User>()
+        .HasIndex(u => u.CPF)
+        .IsUnique();
     }
 }
