@@ -5,9 +5,9 @@ namespace Domain.Models;
 
 public class User : IdentityUser<Guid>
 {
-    public required string Name { get; set; }
-    public required string LastName { get; set; }
-    public required string CPF { get; set; }
+    public string? Name { get; set; }
+    public string? LastName { get; set; }
+    public string? CPF { get; set; }
     public DateTime? BirthDate { get; set; }
     public string? ProfilePhoto { get; set; }
     public string? UserType { get; set; }

@@ -2,9 +2,10 @@ using Application.Interfaces;
 using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using webAPI.Domain.Models;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
 
-namespace Infrastucture;
-public class ApplicationDbContext : DbContext, IApplicationDbContext
+namespace Infrastucture;public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
@@ -24,6 +25,7 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder); 
         // Configuração do relacionamento N:N entre Curso e Professor (CursoProfessor)
         modelBuilder.Entity<CursoProfessor>()
             .HasKey(cp => new { cp.Id_Curso, cp.Id_Professor });
