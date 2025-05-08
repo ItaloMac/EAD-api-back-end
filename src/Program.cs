@@ -147,8 +147,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 // Configuração do tratamento de exceções e códigos de status
-app.UseExceptionHandler();
-app.UseStatusCodePages();
+app.UseMiddleware<ExceptionMiddleware>();
 
 // Mapeamento dos endpoints do Identity (DEPOIS de builder.Build())
 app.MapIdentityApi<User>();

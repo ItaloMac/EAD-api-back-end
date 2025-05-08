@@ -1,6 +1,10 @@
 using Application.DTOs;
+using Domain.Exceptions;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using static Domain.Exceptions.CpfDuplicate;
+using static Domain.Exceptions.EmailDuplicate;
 
 public class IdentityService : IIdentityService
 {
@@ -19,16 +23,16 @@ public class IdentityService : IIdentityService
             Email = request.Email,
             CPF = request.CPF,
             Name = request.Name,
-            LastName = request.LastName
+            LastName = request.LastName,
         };
 
-        var result = await _userManager.CreateAsync(user, request.Password);
+        if (await _userManager.FindByEmailAsync(request.Email) != null)
+            throw new EmailDuplicateException("Email já cadastrado.");
 
-        if (!result.Succeeded)
-        {
-            var errors = string.Join(", ", result.Errors.Select(e => e.Description));
-            throw new Exception($"Erro ao registrar usuário: {errors}");
-        }
+        if (await _userManager.Users.AnyAsync(u => u.CPF ==request.CPF))
+            throw new CpfDuplicateException("CPF já cadastrado.");
+
+        var result = await _userManager.CreateAsync(user, request.Password);
 
         return user.Id;
     }

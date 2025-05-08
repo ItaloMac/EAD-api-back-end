@@ -30,7 +30,9 @@ public class AuthController : ControllerBase
     {
         try
         {
+            
             var userId = await _identityService.RegisterUserAsync(request);
+    
             var user = await _userManager.FindByIdAsync(userId.ToString());
             
             if (user == null)
