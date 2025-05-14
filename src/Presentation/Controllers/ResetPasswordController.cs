@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace InvictusAPI.Presentation.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("[controller]")]
 
 public class ResetPasswordController : ControllerBase
 {

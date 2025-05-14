@@ -3,22 +3,28 @@ using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Resend;
+using System.Web;
+using Microsoft.Extensions.Configuration;
 
-namespace InvictusAPI.Presentation.Controllers {
-
+namespace InvictusAPI.Presentation.Controllers
+{
     [ApiController]
     [Route("api/[controller]")]
-
-    public class ForgotPasswordController : ControllerBase{
+    public class ForgotPasswordController : ControllerBase
+    {
         private readonly UserManager<User> _userManager;
         private readonly IResend _resend;
+        private readonly IConfiguration _configuration;
 
-          // Construtor com injeção de dependência
-            public ForgotPasswordController(UserManager<User> userManager, IResend resend)
-            {
-                _userManager = userManager;
-                _resend = resend;
-            }
+        public ForgotPasswordController(
+            UserManager<User> userManager, 
+            IResend resend,
+            IConfiguration configuration)
+        {
+            _userManager = userManager;
+            _resend = resend;
+            _configuration = configuration;
+        }
 
         [HttpPost("forgot-password")]
         public async Task<IActionResult> ForgotPassword([FromBody] ForgotPasswordDTO request)
@@ -27,20 +33,22 @@ namespace InvictusAPI.Presentation.Controllers {
             {
                 var user = await _userManager.FindByEmailAsync(request.Email);
                 if (user == null)
-                    return NotFound(new ProblemDetails{
-                        Title = "Usuário não encontrado",
-                        Detail = $"Nenhum usuário encontrado com o email {request.Email}",
-                        Status = 404
-                    });
+                {
+                    // Por segurança, retorne sempre Ok mesmo quando o usuário não existe
+                    return Ok(new { Message = "Se o email existir, um link de redefinição foi enviado" });
+                }
 
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-                var resetLink = Url.Action(
-                    action: "ResetPassword", // Nome do método
-                    controller: "ResetPassword", // Nome do controller SEM "Controller"
-                    values: new { userId = user.Id, code = token },
-                    protocol: Request.Scheme);
+                var encodedToken = HttpUtility.UrlEncode(token);
+                
+                // Obter a URL do front-end da configuração
+                var frontendUrl = _configuration["Frontend:BaseUrl"];
+                var resetPath = _configuration["Frontend:ResetPasswordPath"] ?? "/reset-password";
+                
+                // Montar a URL do front-end com os parâmetros
+                var resetLink = $"{frontendUrl}{resetPath}?userId={user.Id}&code={encodedToken}";
 
-                await SendResetPasswordEmail(user.Email!, resetLink!);
+                await SendResetPasswordEmail(user.Email!, resetLink);
 
                 return Ok(new { Message = "Email de redefinição de senha enviado com sucesso" });
             }
@@ -50,7 +58,7 @@ namespace InvictusAPI.Presentation.Controllers {
             }
         }
 
-        private async Task SendResetPasswordEmail(string email, string confirmationLink)
+        private async Task SendResetPasswordEmail(string email, string resetLink)
         {
             var request = new EmailMessage
             {
@@ -61,7 +69,8 @@ namespace InvictusAPI.Presentation.Controllers {
                     <html>
                         <body>
                             <h2>Redefina a sua senha.</h2>
-                            <p>Clique <a href="{confirmationLink}">aqui</a> para redefinir sua senha.</p>
+                            <p>Clique <a href="{resetLink}">aqui</a> para redefinir sua senha.</p>
+                            <p>Se você não solicitou esta redefinição, por favor ignore este email.</p>
                         </body>
                     </html>
                     """
