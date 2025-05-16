@@ -9,10 +9,10 @@ COPY . .
 WORKDIR /app/src
 
 # Restaura dependências
-RUN dotnet restore ./src/InvictusAPI.csproj
+RUN dotnet restore InvictusAPI.csproj
 
 # Publica o projeto
-RUN dotnet publish ./src/InvictusAPI.csproj -c Release -o out
+RUN dotnet publish InvictusAPI.csproj -c Release -o /app/publish
 
 # Etapa 2: Runtime
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
