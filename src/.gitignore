@@ -103,6 +103,10 @@ StyleCopReport.xml
 *.pidb
 *.svclog
 *.scc
+# Evita subir credenciais locais
+appsettings.Development.json
+appsettings.Local.json
+.env
 
 # Chutzpah Test files
 _Chutzpah*
