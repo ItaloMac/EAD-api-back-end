@@ -6,7 +6,7 @@ WORKDIR /app
 COPY . .
 
 # Navega até o projeto principal (ajuste se necessário)
-WORKDIR /app/src/InvictusAPI
+WORKDIR /opt/render/project/src/InvictusAPI
 
 # Restaura dependências
 RUN dotnet restore
