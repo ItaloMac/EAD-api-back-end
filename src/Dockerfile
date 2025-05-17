@@ -8,8 +8,7 @@ COPY . .
 WORKDIR /src
 
 # Restaura dependências
-RUN dotnet restore /src/InvictusAPI.csproj
-
+RUN dotnet restore
 
 # Publica o projeto
 RUN dotnet publish -c Release -o /app/publish
