@@ -6,10 +6,10 @@ WORKDIR /app
 COPY . .
 
 # Navega até o projeto principal (ajuste se necessário)
-WORKDIR /opt/render/project/src/InvictusAPI
+WORKDIR /app/src/InvictusAPI
 
 # Restaura dependências
-RUN dotnet restore
+RUN dotnet restore 
 
 # Publica o projeto
 RUN dotnet publish -c Release -o /app/publish
