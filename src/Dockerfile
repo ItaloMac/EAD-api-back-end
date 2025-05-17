@@ -1,15 +1,15 @@
 # Etapa 1: Build
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
-WORKDIR /app
-
+WORKDIR /src
 # Copia tudo para dentro do container
 COPY . .
 
 # Navega até o projeto principal (ajuste se necessário)
-WORKDIR /app/src/InvictusAPI
+WORKDIR /src
 
 # Restaura dependências
-RUN dotnet restore 
+RUN dotnet restore /src/InvictusAPI.csproj
+
 
 # Publica o projeto
 RUN dotnet publish -c Release -o /app/publish
