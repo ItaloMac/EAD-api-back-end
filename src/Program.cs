@@ -55,7 +55,7 @@ builder.Services.AddIdentityCore<User>(options =>
 .AddApiEndpoints();
 
 // Configuração do Swagger
-var frontendUrl = "http://localhost:5173";
+var frontendUrl = "https://invictus-api-front-end.vercel.app/";
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
