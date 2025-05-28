@@ -56,7 +56,7 @@ builder.Services.AddIdentityCore<User>(options =>
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddApiEndpoints();
 
-var frontendUrl = "https://invictus-api-front-end.vercel.app/";
+var frontendUrl = "https://invictus-api-front-end.vercel.app";
 
 // Configuração do Swagger
 builder.Services.AddEndpointsApiExplorer();
