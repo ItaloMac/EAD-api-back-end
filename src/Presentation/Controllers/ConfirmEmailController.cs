@@ -12,7 +12,7 @@ public class ConfirmEmailController : ControllerBase
     private readonly UserManager<User> _userManager;
     private readonly IConfiguration _configuration;
 
-    public ConfirmEmailController(UserManager<User> userManager, IConfiguration configuratio)
+    public ConfirmEmailController(UserManager<User> userManager, IConfiguration configuration)
     {
         _userManager = userManager;
         _configuration = configuration;
