@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization; // Seu modelo de usuário
+using Microsoft.Extensions.Configuration;
+
 
 [ApiController]
 [Route("api/[controller]")]
