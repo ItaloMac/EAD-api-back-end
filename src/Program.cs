@@ -14,14 +14,21 @@ var builder = WebApplication.CreateBuilder(args);
 // Carregar variáveis de ambiente
 DotNetEnv.Env.Load();
 
-var connectionString = Environment.GetEnvironmentVariable("DB_CONNECTION_STRING");
+var environment = builder.Environment.EnvironmentName;
 
-//ar connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
-    //?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+if (string.IsNullOrEmpty(connectionString))
+{
+    throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+}
 
 // Configuração do DbContext
 builder.Services.AddDbContext<IApplicationDbContext, ApplicationDbContext>(options =>
     options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString)));
+
+// Define a URL do frontend (que também varia por ambiente)
+var frontendUrl = builder.Configuration["Frontend:BaseUrl"]
+    ?? throw new InvalidOperationException("Frontend URL not configured.");
 
 
 // Configuração hierárquica (variáveis de ambiente > appsettings)
@@ -55,8 +62,6 @@ builder.Services.AddIdentityCore<User>(options =>
 .AddRoles<IdentityRole<Guid>>()
 .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddApiEndpoints();
-
-var frontendUrl = "https://invictus-api-front-end.vercel.app";
 
 // Configuração do Swagger
 builder.Services.AddEndpointsApiExplorer();
