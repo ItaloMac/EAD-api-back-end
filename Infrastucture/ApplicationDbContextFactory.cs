@@ -11,6 +11,7 @@ namespace Infrastucture
             var configuration = new ConfigurationBuilder() //constroi uma configuração a partir de varias fontes
                 .SetBasePath(Directory.GetCurrentDirectory()) //define o diretorio base para busca de arquivo de configuração
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) //define appsettings como o atquivo de configuracao, obrigatorio, carregado se for alterado
+                .AddJsonFile($"appsettings.Development.json", optional: true)
                 .Build();
 
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>(); //configura as opcoes de aplication db context

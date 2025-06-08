@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace webAPI.Migrations
+namespace Infrastucture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250404023712_Identity_Models")]
-    partial class Identity_Models
+    [Migration("20250607234843_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -324,8 +324,10 @@ namespace webAPI.Migrations
                         .HasMaxLength(256)
                         .HasColumnType("varchar(256)");
 
-                    b.Property<string>("UserType")
-                        .HasColumnType("longtext");
+                    b.Property<int>("UserType")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(1);
 
                     b.Property<string>("VindiCustomerId")
                         .HasColumnType("longtext");

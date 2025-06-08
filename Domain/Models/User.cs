@@ -10,7 +10,7 @@ public class User : IdentityUser<Guid>
     public string? CPF { get; set; }
     public DateTime? BirthDate { get; set; }
     public string? ProfilePhoto { get; set; }
-    public string? UserType { get; set; }
+    public UserType UserType { get; set; } = UserType.Aluno;
     public string? VindiCustomerId { get; set; }
 
     [ForeignKey("Address")]

@@ -25,7 +25,7 @@ namespace Infrastucture;public class ApplicationDbContext : IdentityDbContext<Us
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        base.OnModelCreating(modelBuilder); 
+        base.OnModelCreating(modelBuilder);
         // Configuração do relacionamento N:N entre Curso e Professor (CursoProfessor)
         modelBuilder.Entity<CursoProfessor>()
             .HasKey(cp => new { cp.Id_Curso, cp.Id_Professor });
@@ -45,12 +45,18 @@ namespace Infrastucture;public class ApplicationDbContext : IdentityDbContext<Us
             .HasForeignKey(c => c.CoordenadorId)
             .OnDelete(DeleteBehavior.Cascade);
 
-         modelBuilder.Entity<User>()
-        .HasIndex(u => u.Email)
-        .IsUnique();
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.Email)
+            .IsUnique();
 
-          modelBuilder.Entity<User>()
-        .HasIndex(u => u.CPF)
-        .IsUnique();
+        modelBuilder.Entity<User>()
+            .HasIndex(u => u.CPF)
+            .IsUnique();
+        
+       modelBuilder.Entity<User>()
+            .Property(u => u.UserType)
+            .HasDefaultValue(UserType.Aluno) // Valor padrão explícito
+            .HasConversion<int>() // Converte para int no banco
+            .HasSentinel((UserType)(-1)); // Valor sentinela que nunca será usado
     }
 }
