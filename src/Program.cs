@@ -10,6 +10,7 @@ using Resend;
 using DotNetEnv;
 using Application.Interfaces.Admin;
 using Application.Services.Admin.UserServices;
+using Application.Services.Admin.RegistrationService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -128,7 +129,7 @@ builder.Services.AddScoped<IModuloService, ModuloService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IUserService, UserService>();
-
+builder.Services.AddScoped<IRegistrationService, RegistrationServices>();
 
 builder.Services
     .AddAuthentication(options =>
