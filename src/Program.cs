@@ -8,6 +8,8 @@ using Microsoft.OpenApi.Models;
 using Domain.Models;
 using Resend;
 using DotNetEnv;
+using Application.Interfaces.Admin;
+using Application.Services.Admin.UserServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -125,6 +127,7 @@ builder.Services.AddScoped<IProfessorService, ProfessorService>();
 builder.Services.AddScoped<IModuloService, ModuloService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 
 builder.Services

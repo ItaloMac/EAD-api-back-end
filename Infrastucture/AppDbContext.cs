@@ -50,6 +50,10 @@ namespace Infrastucture;public class ApplicationDbContext : IdentityDbContext<Us
             .IsUnique();
 
         modelBuilder.Entity<User>()
+            .Property(u => u.BirthDate)
+            .HasColumnType(null);
+
+        modelBuilder.Entity<User>()
             .HasIndex(u => u.CPF)
             .IsUnique();
         
