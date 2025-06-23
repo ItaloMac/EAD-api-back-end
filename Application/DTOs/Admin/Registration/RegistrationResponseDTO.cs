@@ -10,6 +10,7 @@ public class RegistrationResponseDTO
     public DateTime? CancellationDate { get; set; }
     public required ClassDTO Class { get; set; }
     public required StudentDTO User { get; set; }
+    public string? VindiPlanId { get; set; }
 }
 
 public class StudentDTO

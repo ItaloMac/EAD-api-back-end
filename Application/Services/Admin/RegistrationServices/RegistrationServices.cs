@@ -63,4 +63,34 @@ public class RegistrationServices : IRegistrationService
             throw new ApplicationException("Erro ao listar a matricula", ex);
         }
     }
+
+    public async Task<CreateRegistrationDTO> PostRegistrationAsync(CreateRegistrationDTO dto)
+    {
+        try
+        {
+            var NewRegistration = new Registration
+            {
+                RegistrationStatus = dto.RegistrationStatus,
+                RegistrationDate = dto.RegistrationDate,
+                CancellationDate = dto.CancellationDate,
+                ClassId = dto.Class.Id,
+                UserId = dto.User.Id,
+                VindiPlanId = dto.VindiPlanId
+            };
+
+            _context.Registrations.Add(NewRegistration);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<CreateRegistrationDTO>(NewRegistration);
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao criar matrícula", ex);
+        }
+       
+    }
+
+    public Task<UpdateRegistrationDTO> PutRegistrationAsync(Guid Id, UpdateRegistrationDTO registrationDTO)
+    {
+        throw new NotImplementedException();
+    }
 }

@@ -9,11 +9,14 @@ public class RegistrationProfile : Profile
 {
     public RegistrationProfile()
     {
-        CreateMap<Registration, RegistrationResponseDTO>();
+        CreateMap<CreateRegistrationDTO, Registration>()
+         .ForMember(dest => dest.ClassId, opt => opt.MapFrom(src => src.Class.Id))
+         .ForMember(dest => dest.UserId, opt => opt.MapFrom(src => src.User.Id));
 
-        CreateMap<Class, ClassDTO>();
-        CreateMap<Curso, CourseDTO>();
-
-        CreateMap<User, StudentDTO>();
+        CreateMap<Registration, CreateRegistrationDTO>()
+         .ForMember(dest => dest.Class, opt => opt.MapFrom(src => new ClassIdDTO { Id = src.ClassId }))
+         .ForMember(dest => dest.User, opt => opt.MapFrom(src => new UserIdDTO { Id = src.UserId }));
     }
+
+    
 }
