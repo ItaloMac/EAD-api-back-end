@@ -1,3 +1,4 @@
+using System;
 using Application.DTOs.Admin.Registration;
 using Application.Interfaces.Admin;
 using Domain.Models;
@@ -8,18 +9,18 @@ namespace InvictusAPI.Presentation.Controllers.Admin.RegistrationControllers;
 
 [ApiController]
 [Route("api/admin")]
-public class CreateRegistrationController : ControllerBase
+public class UpdateRegistrationController : ControllerBase
 {
     private readonly IRegistrationService _registrationService;
     private readonly UserManager<User> _userManager;
-    public CreateRegistrationController(IRegistrationService registrationService, UserManager<User> userManager)
+    public UpdateRegistrationController(IRegistrationService registrationService, UserManager<User> userManager)
     {
         _userManager = userManager;
         _registrationService = registrationService;
     }
 
-    [HttpPost("matriculas/create")]
-    public async Task<IActionResult> CreateRegistrationAsync([FromBody] CreateRegistrationDTO responseDTO)
+    [HttpPut("matriculas/update/{id:guid}")]
+    public async Task<IActionResult> UpdateRegistrationAsync(Guid id, [FromBody] UpdateRegistrationDTO dto)
     {
         try
         {
@@ -28,14 +29,14 @@ public class CreateRegistrationController : ControllerBase
             if (!autorizado)
                 return resultado;
 
-            var newRegistration = await _registrationService.PostRegistrationAsync(responseDTO);
-            return Ok(newRegistration);
+            var newDataRegistration = await _registrationService.PutRegistrationAsync(id, dto);
 
+            return Ok(newDataRegistration);
         }
         catch (Exception ex)
         {
             var message = ex.InnerException?.Message ?? ex.Message;
-            return BadRequest($"Erro ao criar matriculas do usuário: {message}");
+            return BadRequest($"Erro ao atualiza a matricula: {message}");
         }
     }
 }

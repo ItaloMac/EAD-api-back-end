@@ -53,7 +53,7 @@ public class RegistrationServices : IRegistrationService
             .FirstOrDefaultAsync(r => r.Id == id);
 
         if (registration == null)
-            throw new KeyNotFoundException("Matrícula não encontrada.");
+            throw new ApplicationException("Matrícula não encontrada.");
 
         return _mapper.Map<RegistrationResponseDTO>(registration);
 
@@ -89,8 +89,30 @@ public class RegistrationServices : IRegistrationService
        
     }
 
-    public Task<UpdateRegistrationDTO> PutRegistrationAsync(Guid Id, UpdateRegistrationDTO registrationDTO)
+    public async Task<UpdateRegistrationDTO> PutRegistrationAsync(Guid Id, UpdateRegistrationDTO registrationDTO)
     {
-        throw new NotImplementedException();
+        try
+        {
+            var registrationExisting = await _context.Registrations.FirstOrDefaultAsync(r => r.Id == Id);
+
+            if (registrationExisting == null)
+            {
+                throw new ApplicationException("Matrícula não encontrada.");
+            }
+
+            registrationExisting.RegistrationStatus = registrationDTO.RegistrationStatus;
+            registrationExisting.RegistrationDate = registrationDTO.RegistrationDate;
+            registrationExisting.CancellationDate = registrationDTO.CancellationDate;
+            registrationExisting.ClassId = registrationDTO.Class.Id;
+            registrationExisting.UserId = registrationDTO.User.Id;
+
+            _context.Registrations.Update(registrationExisting);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<UpdateRegistrationDTO>(registrationExisting);
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao atualizar a matrícula", ex);
+        }
     }
 }
