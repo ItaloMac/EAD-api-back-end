@@ -11,6 +11,7 @@ using DotNetEnv;
 using Application.Interfaces.Admin;
 using Application.Services.Admin.UserServices;
 using Application.Services.Admin.RegistrationService;
+using Application.Services.Admin;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -130,6 +131,7 @@ builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationServices>();
+builder.Services.AddScoped<ICourseServices, CourseService>();
 
 builder.Services
     .AddAuthentication(options =>

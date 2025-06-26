@@ -1,4 +1,3 @@
-using System;
 using Application.DTOs.Admin.Registration;
 using Application.Interfaces;
 using Application.Interfaces.Admin;
@@ -36,7 +35,7 @@ public class RegistrationServices : IRegistrationService
 
             return registrations;
         }
-        catch(Exception ex)
+        catch (Exception ex)
         {
             throw new ApplicationException("Erro ao listar as matriculas", ex);
         }
@@ -52,10 +51,10 @@ public class RegistrationServices : IRegistrationService
                 .ThenInclude(c => c.Curso)
             .FirstOrDefaultAsync(r => r.Id == id);
 
-        if (registration == null)
-            throw new ApplicationException("Matrícula não encontrada.");
+            if (registration == null)
+                throw new ApplicationException("Matrícula não encontrada.");
 
-        return _mapper.Map<RegistrationResponseDTO>(registration);
+            return _mapper.Map<RegistrationResponseDTO>(registration);
 
         }
         catch (Exception ex)
@@ -86,7 +85,6 @@ public class RegistrationServices : IRegistrationService
         {
             throw new ApplicationException("Erro ao criar matrícula", ex);
         }
-       
     }
 
     public async Task<UpdateRegistrationDTO> PutRegistrationAsync(Guid Id, UpdateRegistrationDTO registrationDTO)
@@ -113,6 +111,25 @@ public class RegistrationServices : IRegistrationService
         catch (Exception ex)
         {
             throw new ApplicationException("Erro ao atualizar a matrícula", ex);
+        }
+    }
+
+    public async Task<bool> DeleteRegistrationAsync(Guid Id)
+    {
+        try
+        {
+            var registrationToDelete = await _context.Registrations.FirstOrDefaultAsync(r => r.Id == Id);
+            if (registrationToDelete == null)
+            {
+                throw new ApplicationException("Matrícula não encontrada.");
+            }
+            _context.Registrations.Remove(registrationToDelete);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao excluir matrícula", ex);
         }
     }
 }

@@ -1,5 +1,3 @@
-using System;
-
 namespace Application.DTOs.Admin.Registration;
 
 public class UpdateRegistrationDTO

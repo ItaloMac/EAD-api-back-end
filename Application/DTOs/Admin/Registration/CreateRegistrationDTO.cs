@@ -1,5 +1,3 @@
-using System;
-
 namespace Application.DTOs.Admin.Registration;
 
 public class CreateRegistrationDTO
@@ -20,7 +18,6 @@ public class UserIdDTO
 public class ClassIdDTO
 {
     public Guid Id { get; set; }
-
 }
 
 public class CourseIdDTO

@@ -1,6 +1,3 @@
-using System;
-using Microsoft.AspNetCore.Identity;
-
 namespace Application.DTOs.Admin.Registration;
 
 public class RegistrationResponseDTO
