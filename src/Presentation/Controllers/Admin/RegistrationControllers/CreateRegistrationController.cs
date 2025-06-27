@@ -8,6 +8,10 @@ namespace InvictusAPI.Presentation.Controllers.Admin.RegistrationControllers;
 
 [ApiController]
 [Route("api/admin")]
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("Portal Admin")]
+
+
 public class CreateRegistrationController : ControllerBase
 {
     private readonly IRegistrationService _registrationService;

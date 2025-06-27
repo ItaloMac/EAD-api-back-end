@@ -5,6 +5,8 @@ namespace webAPI.Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "v1")]
+    [Tags("Site")]
 
     public class ProfessorController : ControllerBase
     {
@@ -19,27 +21,31 @@ namespace webAPI.Presentation.Controllers
         [HttpGet("{id}/professores")]
         public async Task<IActionResult> GetProfessoresByCursoId(Guid id)
         {
-            try{
+            try
+            {
                 var professores = await _professorService.GetProfessoresByIdCursoAsync(id);
-                
-                if(professores is null)
+
+                if (professores is null)
                 {
-                    return NotFound( new ProblemDetails {
+                    return NotFound(new ProblemDetails
+                    {
                         Title = "O professor informado não foi encontrado",
                         Detail = $"O professor com ID {id} não foi encontrado.",
                         Status = 404
                     });
-                } 
-                
+                }
+
                 return Ok(professores);
 
             }
 
-            catch(Exception ex){
-                return StatusCode(500, new ProblemDetails {
-                        Title = "Ocorreu um erro na sua solicitação, tente novamente.",
-                        Detail = ex.Message,
-                        Status = 500
+            catch (Exception ex)
+            {
+                return StatusCode(500, new ProblemDetails
+                {
+                    Title = "Ocorreu um erro na sua solicitação, tente novamente.",
+                    Detail = ex.Message,
+                    Status = 500
                 });
             }
         }
@@ -47,11 +53,13 @@ namespace webAPI.Presentation.Controllers
         [HttpGet("corpo-docente")]
         public async Task<IActionResult> GetAllTeachers()
         {
-            try{
+            try
+            {
                 var professores = await _professorService.GetAllProfessores();
-                if(professores is null)
+                if (professores is null)
                 {
-                    return NotFound(new ProblemDetails{
+                    return NotFound(new ProblemDetails
+                    {
                         Title = "Não foi possível listar os professores",
                         Detail = $"Os professores não foram encontrados.",
                         Status = 404
@@ -59,9 +67,11 @@ namespace webAPI.Presentation.Controllers
                 }
                 return Ok(professores);
 
-            } catch(Exception ex)
+            }
+            catch (Exception ex)
             {
-                return StatusCode(500, new ProblemDetails{
+                return StatusCode(500, new ProblemDetails
+                {
                     Title = "Ocorreu um erro na sua solicitação, tente novamente.",
                     Detail = ex.Message,
                     Status = 500

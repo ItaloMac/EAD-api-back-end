@@ -5,6 +5,8 @@ namespace InvictusAPI.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[Controller]")]
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("Site")]
 
 public class ContactController : ControllerBase
 {

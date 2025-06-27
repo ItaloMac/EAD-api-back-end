@@ -8,6 +8,8 @@ namespace InvictusAPI.Presentation.Controllers;
 
 [ApiController]
 [Route("[controller]")]
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("Site")]
 
 public class ResetPasswordController : ControllerBase
 {

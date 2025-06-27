@@ -8,6 +8,8 @@ namespace InvictusAPI.Presentation.Controllers.Admin;
 
 [ApiController]
 [Route("api/admin")]
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("Portal Admin")]
 
 public class GetAllRegistrationsController : ControllerBase
 {

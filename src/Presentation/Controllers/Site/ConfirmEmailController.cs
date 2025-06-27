@@ -7,6 +7,8 @@ using Microsoft.Extensions.Configuration;
 
 [ApiController]
 [Route("api/[controller]")]
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("Site")]
 public class ConfirmEmailController : ControllerBase
 {
     private readonly UserManager<User> _userManager;

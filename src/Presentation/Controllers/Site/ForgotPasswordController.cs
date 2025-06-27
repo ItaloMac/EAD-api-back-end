@@ -10,6 +10,9 @@ namespace InvictusAPI.Presentation.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "v1")]
+    [Tags("Site")]
+
     public class ForgotPasswordController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
@@ -17,7 +20,7 @@ namespace InvictusAPI.Presentation.Controllers
         private readonly IConfiguration _configuration;
 
         public ForgotPasswordController(
-            UserManager<User> userManager, 
+            UserManager<User> userManager,
             IResend resend,
             IConfiguration configuration)
         {
@@ -40,11 +43,11 @@ namespace InvictusAPI.Presentation.Controllers
 
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var encodedToken = HttpUtility.UrlEncode(token);
-                
+
                 // Obter a URL do front-end da configuração
                 var frontendUrl = _configuration["Frontend:BaseUrl"];
                 var resetPath = _configuration["Frontend:ResetPasswordPath"] ?? "/reset-password";
-                
+
                 // Montar a URL do front-end com os parâmetros
                 var resetLink = $"{frontendUrl}{resetPath}?userId={user.Id}&code={encodedToken}";
 
@@ -75,7 +78,7 @@ namespace InvictusAPI.Presentation.Controllers
                     </html>
                     """
             };
-            
+
             await _resend.EmailSendAsync(request);
         }
     }

@@ -1,5 +1,4 @@
 using System;
-using Application.DTOs.Admin.Course;
 using Application.Interfaces.Admin;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
@@ -12,18 +11,20 @@ namespace InvictusAPI.Presentation.Controllers.Admin.CourseControllers;
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
 
-public class GetAllCoursesController : ControllerBase
+public class GetCourseByIdController : ControllerBase
 {
     private readonly ICourseServices _courseServices;
     private readonly UserManager<User> _userManager;
-    public GetAllCoursesController(ICourseServices courseServices, UserManager<User> userManager)
+    public GetCourseByIdController(ICourseServices courseServices, UserManager<User> userManager)
     {
         _userManager = userManager;
         _courseServices = courseServices;
     }
 
-    [HttpGet("cursos")]
-    public async Task<IActionResult> GetAllCoursesAsync()
+    [HttpGet("cursos/{id:guid}")]
+    [ApiExplorerSettings(GroupName = "Portal Admin")]
+
+    public async Task<IActionResult> GetCourseByIdAsync(Guid id)
     {
         try
         {
@@ -32,14 +33,14 @@ public class GetAllCoursesController : ControllerBase
             if (!autorizado)
                 return resultado;
 
-            var listAllCourses = await _courseServices.GetAllCoursesAsync();
-            return Ok(listAllCourses);
+            var course = await _courseServices.GetCourseByIdAsync(id);
 
+            return Ok(course);
         }
         catch (Exception ex)
         {
             var message = ex.InnerException?.Message ?? ex.Message;
-            return BadRequest($"Erro ao listar todos os cursos: {message}");
+            return BadRequest($"Erro ao listar o curso: {message}");
         }
     }
 }

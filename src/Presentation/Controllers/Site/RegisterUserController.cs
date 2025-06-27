@@ -6,6 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("Site")]
+
 public class AuthController : ControllerBase
 {
     private readonly IIdentityService _identityService;

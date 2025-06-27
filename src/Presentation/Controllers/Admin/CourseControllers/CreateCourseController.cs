@@ -12,18 +12,18 @@ namespace InvictusAPI.Presentation.Controllers.Admin.CourseControllers;
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
 
-public class GetAllCoursesController : ControllerBase
+public class CreateCourseController : ControllerBase
 {
     private readonly ICourseServices _courseServices;
     private readonly UserManager<User> _userManager;
-    public GetAllCoursesController(ICourseServices courseServices, UserManager<User> userManager)
+    public CreateCourseController(ICourseServices courseServices, UserManager<User> userManager)
     {
         _userManager = userManager;
         _courseServices = courseServices;
     }
 
-    [HttpGet("cursos")]
-    public async Task<IActionResult> GetAllCoursesAsync()
+    [HttpPost("cursos/create")]
+    public async Task<IActionResult> CreateCourseAsync([FromBody] CreateCourseDTO dto)
     {
         try
         {
@@ -32,14 +32,14 @@ public class GetAllCoursesController : ControllerBase
             if (!autorizado)
                 return resultado;
 
-            var listAllCourses = await _courseServices.GetAllCoursesAsync();
-            return Ok(listAllCourses);
+            var newCourse = await _courseServices.CreateCourseAsync(dto);
+            return Ok(newCourse);
 
         }
         catch (Exception ex)
         {
             var message = ex.InnerException?.Message ?? ex.Message;
-            return BadRequest($"Erro ao listar todos os cursos: {message}");
+            return BadRequest($"Erro ao criar o curso: {message}");
         }
     }
 }

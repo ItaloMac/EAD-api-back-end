@@ -12,6 +12,7 @@ using Application.Interfaces.Admin;
 using Application.Services.Admin.UserServices;
 using Application.Services.Admin.RegistrationService;
 using Application.Services.Admin;
+using InvictusAPI.swagger;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -98,6 +99,8 @@ builder.Services.AddSwaggerGen(c =>
         }
     });
 
+    c.DocumentFilter<TagConfiguration>();
+
     c.DocInclusionPredicate((docName, apiDesc) =>
     {
             // Remove endpoints relacionados ao Identity (ForgotPassword, ResetPassword, Register)
@@ -111,6 +114,7 @@ builder.Services.AddSwaggerGen(c =>
             return true; // Mantém outros endpoints
     });
 });
+
 
 // Configuração do CORS
 builder.Services.AddCors(options =>
