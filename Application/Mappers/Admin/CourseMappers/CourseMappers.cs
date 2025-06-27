@@ -11,15 +11,20 @@ public class CourseProfile : Profile
     public CourseProfile()
     {
         CreateMap<Curso, CoursesReponseDTO>()
-            .ForMember(dest => dest.Coordenador, opt => opt.MapFrom(src => src.Coordenador));
+        .ForMember(dest => dest.Coordenador, opt => opt.MapFrom(src => src.Coordenador));
 
         CreateMap<Professor, CoordenadorCourse>();
-
 
         CreateMap<CreateCourseDTO, Curso>()
         .ForMember(dest => dest.CoordenadorId, opt => opt.MapFrom(src => src.Coordenador.Id));
 
         CreateMap<Curso, CreateCourseDTO>()
+        .ForMember(dest => dest.Coordenador, opt => opt.MapFrom(src => new CoordenadorCourse { Id = src.Coordenador.Id }));
+
+        CreateMap<UpdateCourseDTO, Curso>()
+        .ForMember(dest => dest.CoordenadorId, opt => opt.MapFrom(src => src.Coordenador.Id));
+
+        CreateMap<Curso, UpdateCourseDTO>()
         .ForMember(dest => dest.Coordenador, opt => opt.MapFrom(src => new CoordenadorCourse { Id = src.Coordenador.Id }));
     }
 

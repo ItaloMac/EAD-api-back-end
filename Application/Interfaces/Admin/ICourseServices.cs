@@ -7,4 +7,5 @@ public interface ICourseServices
     Task<List<CoursesReponseDTO>> GetAllCoursesAsync();
     Task<CoursesReponseDTO> GetCourseByIdAsync(Guid id);
     Task<CreateCourseDTO> CreateCourseAsync(CreateCourseDTO dto);
+    Task<UpdateCourseDTO> UpdateCourseAsync(Guid id, UpdateCourseDTO dto);
 }
