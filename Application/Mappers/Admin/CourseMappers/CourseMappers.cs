@@ -26,6 +26,11 @@ public class CourseProfile : Profile
 
         CreateMap<Curso, UpdateCourseDTO>()
         .ForMember(dest => dest.Coordenador, opt => opt.MapFrom(src => new CoordenadorCourse { Id = src.Coordenador.Id }));
-    }
 
+        CreateMap<CursoProfessor, CourseTeacherDTO>();
+        CreateMap<CourseTeacherDTO, CursoProfessor>();
+
+        CreateMap<Class, CourseClassListDTO>();
+        CreateMap<CourseClassListDTO, Class>();
+    }
 }

@@ -21,6 +21,73 @@ public class CourseService : ICourseServices
         _userManager = userManager;
     }
 
+    public async Task<AssignCordinatorDTO> AssignCordinatorAsync(Guid CourseId, AssignCordinatorDTO dto)
+    {
+        try
+        {
+            var courseExisting = await _context.Cursos.FirstOrDefaultAsync(c => c.Id == CourseId);
+            if (courseExisting == null)
+                throw new ApplicationException("Curso não encontradO.");
+
+            var professor = await _context.Professores.FirstOrDefaultAsync(p => p.Id == dto.CoordenadorId);
+            if (professor == null)
+                throw new ApplicationException("Professor não encontrado.");
+
+            courseExisting.CoordenadorId = dto.CoordenadorId;
+
+            _context.Cursos.Update(courseExisting);
+            await _context.SaveChangesAsync();
+            return dto;
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao vincular coordenador ao curso", ex);
+        }
+    }
+
+    public async Task<CourseTeacherDTO> AssignProfessorToCourseAsync(Guid CourseId, CourseTeacherDTO ProfessorId)
+    {
+        try
+        {
+            var course = await _context.Cursos.FirstOrDefaultAsync(c => c.Id == CourseId);
+            if (course == null)
+            {
+                throw new ApplicationException("Curso não encontrado.");
+            }
+
+            var newTeacher = new CursoProfessor
+            {
+                Id_Curso = CourseId,
+                Id_Professor = ProfessorId.ProfessorId
+            };
+            _context.CursoProfessores.Add(newTeacher);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<CourseTeacherDTO>(newTeacher);
+
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao vincular o professor", ex);
+        }
+    }
+
+    public async Task<List<CourseClassListDTO>> CourseClassListAssync(Guid CourseId)
+    {
+        try
+        {
+            var courseClass = await _context.Classes.
+            Where(c => c.CursoId == CourseId)
+            .ProjectTo<CourseClassListDTO>(_mapper.ConfigurationProvider)
+            .ToListAsync();
+
+            return courseClass;
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao listar as turmas do curso", ex);
+        }
+    }
+
     public async Task<CreateCourseDTO> CreateCourseAsync(CreateCourseDTO dto)
     {
         try
@@ -58,7 +125,71 @@ public class CourseService : ICourseServices
         catch (Exception ex)
         {
             throw new ApplicationException("Erro ao criar novo curso", ex);
+        }
+    }
 
+    public async Task<bool> DeleteCourseAsync(Guid id)
+    {
+        try
+        {
+            var courseToDelete = await _context.Cursos.FirstOrDefaultAsync(c => c.Id == id);
+            if (courseToDelete == null)
+            {
+                throw new ApplicationException("Curso não encontrado.");
+            }
+
+            var relatedClass = await _context.Classes.
+            Where(classe => classe.CursoId == id)
+            .ToListAsync();
+
+           // Excluir todas as matrículas relacionadas a essas turmas
+            var relatedClassIds = relatedClass.Select(cl => cl.Id).ToList();
+            var relatedRegistrations = await _context.Registrations
+                .Where(m => relatedClassIds.Contains(m.ClassId))
+                .ToListAsync();
+                _context.Registrations.RemoveRange(relatedRegistrations);
+
+          // Excluir as turmas
+            _context.Classes.RemoveRange(relatedClass);
+
+            // Excluir o curso
+            _context.Cursos.Remove(courseToDelete);
+
+            // Salvar tudo
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao excluir o curso", ex);
+        }
+    }
+
+    public async Task<bool> DeleteTeacherFromCourseAsync(Guid CourseId, Guid ProfessorId)
+    {
+        try
+        {
+            var course = await _context.Cursos.FirstOrDefaultAsync(c => c.Id == CourseId);
+            if (course == null)
+            {
+                throw new ApplicationException("Curso não encontrado.");
+            }
+
+            var teacherToDelete = await _context.CursoProfessores
+            .FirstOrDefaultAsync(cp => cp.Id_Curso == CourseId && cp.Id_Professor == ProfessorId);
+           
+            if (teacherToDelete == null)
+            {
+                throw new ApplicationException("Professor não está vinculado a este curso.");
+            }
+
+            _context.CursoProfessores.Remove(teacherToDelete);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao remover o professor do curso", ex);
         }
     }
 
@@ -98,6 +229,34 @@ public class CourseService : ICourseServices
         }
     }
 
+    public async Task<List<CourseTeacherResponseDTO>> GetTeachersByIdCourseAsync(Guid CursoId)
+    {
+        try
+        {
+            var course = await _context.Cursos.FirstOrDefaultAsync(c => c.Id == CursoId);
+            if (course == null)
+            {
+                throw new ApplicationException("Curso não encontrado.");
+            }
+
+            var relatedTeachers = await _context.CursoProfessores.
+            Where(cp => cp.Id_Curso == CursoId)
+            .Select(cp => new CourseTeacherResponseDTO
+            {
+                Name = cp.Professor.Name,
+                MiniResume = cp.Professor.MiniResume,
+                ImagemUrl = cp.Professor.ImagemUrl
+            })
+            .ToListAsync();
+            return relatedTeachers;
+
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao listar os professores do curso", ex);
+        }
+    }
+
     public async Task<UpdateCourseDTO> UpdateCourseAsync(Guid id, UpdateCourseDTO dto)
     {
          try
@@ -106,7 +265,7 @@ public class CourseService : ICourseServices
 
             if (courseExisting == null)
             {
-                throw new ApplicationException("Matrícula não encontrada.");
+                throw new ApplicationException("Curso não encontrada.");
             }
 
             courseExisting.Status = dto.Status;

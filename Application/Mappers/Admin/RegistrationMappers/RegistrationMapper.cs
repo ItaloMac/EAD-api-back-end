@@ -40,5 +40,6 @@ public class RegistrationProfile : Profile
             .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
             .ForMember(dest => dest.CPF, opt => opt.MapFrom(src => src.CPF))
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));
+        
     }
 }
