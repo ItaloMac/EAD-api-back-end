@@ -7,6 +7,8 @@ using Resend;
 namespace InvictusAPI.Presentation.Controllers{
     [ApiController]
     [Route("api/[controller]")]
+    [ApiExplorerSettings(GroupName = "v1")]
+    [Tags("Site")]
 
     public class EmailConfirmationController : ControllerBase{
         private readonly UserManager<User> _userManager;

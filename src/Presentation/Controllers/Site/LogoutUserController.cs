@@ -10,6 +10,9 @@ namespace InvictusAPI.Presentation.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("Site")]
+
 public class LogoutController : ControllerBase
 {
     [HttpPost]

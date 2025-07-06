@@ -1,34 +1,31 @@
 using System;
 using Application.Interfaces.Admin;
 using Domain.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InvictusAPI.Presentation.Controllers.Admin.UserControllers;
+namespace InvictusAPI.Presentation.Controllers.Admin.CourseControllers;
 
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
 
-public class DeleteUserController : ControllerBase
+public class GetCourseByIdController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly ICourseServices _courseServices;
     private readonly UserManager<User> _userManager;
-
-    public DeleteUserController(IUserService userService, UserManager<User> userManager)
+    public GetCourseByIdController(ICourseServices courseServices, UserManager<User> userManager)
     {
         _userManager = userManager;
-        _userService = userService;
+        _courseServices = courseServices;
     }
 
-    [Authorize]
-    [HttpDelete("usuarios/delete/{id:guid}")]
+    [HttpGet("cursos/{id:guid}")]
+    [ApiExplorerSettings(GroupName = "Portal Admin")]
 
-    public async Task<IActionResult> DeleteUser(Guid id)
+    public async Task<IActionResult> GetCourseByIdAsync(Guid id)
     {
-        
         try
         {
             var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
@@ -36,15 +33,14 @@ public class DeleteUserController : ControllerBase
             if (!autorizado)
                 return resultado;
 
-            var DeleteUser = await _userService.DeleteUserAsync(id);
+            var course = await _courseServices.GetCourseByIdAsync(id);
 
-            return Ok(DeleteUser);
+            return Ok(course);
         }
         catch (Exception ex)
         {
             var message = ex.InnerException?.Message ?? ex.Message;
-            return BadRequest($"Erro ao deletar usuário: {message}");
+            return BadRequest($"Erro ao listar o curso: {message}");
         }
     }
-
 }

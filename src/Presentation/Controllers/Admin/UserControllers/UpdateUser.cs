@@ -8,6 +8,9 @@ namespace InvictusAPI.Presentation.Controllers.Admin.UserControllers;
 
 [ApiController]
 [Route("api/admin")]
+[ApiExplorerSettings(GroupName = "v1")]
+[Tags("Portal Admin")]
+
 public class UpdateUserController : Controller
 {
     private readonly IUserService _userService;

@@ -1,28 +1,28 @@
+using System;
 using Application.Interfaces.Admin;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InvictusAPI.Presentation.Controllers.Admin.UserControllers;
+namespace InvictusAPI.Presentation.Controllers.Admin;
 
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
 
-public class GetUserRegistrationsController : ControllerBase
+public class GetAllRegistrationsController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly IRegistrationService _registrationService;
     private readonly UserManager<User> _userManager;
-    public GetUserRegistrationsController(IUserService userService, UserManager<User> userManager)
+    public GetAllRegistrationsController(IRegistrationService registrationService, UserManager<User> userManager)
     {
         _userManager = userManager;
-        _userService = userService;
+        _registrationService = registrationService;
     }
 
-    [HttpGet("usuarios/{id:guid}/matriculas")]
-
-    public async Task<IActionResult> GetUserRegistrationsByUserIdAsync(Guid id)
+    [HttpGet("matriculas")]
+    public async Task<IActionResult> GetAllRegistrationsAsync()
     {
         try
         {
@@ -32,8 +32,9 @@ public class GetUserRegistrationsController : ControllerBase
                 return resultado;
 
 
-            var registrations = await _userService.GetUserRegistrationsByUserIdAsync(id);
-            return Ok(registrations);
+            var allRegistrations = await _registrationService.GetAllRegistrations();
+
+            return Ok(allRegistrations);
         }
         catch (Exception ex)
         {
@@ -41,4 +42,6 @@ public class GetUserRegistrationsController : ControllerBase
             return BadRequest($"Erro ao buscar as matriculas do usuário: {message}");
         }
     }
+
+   
 }

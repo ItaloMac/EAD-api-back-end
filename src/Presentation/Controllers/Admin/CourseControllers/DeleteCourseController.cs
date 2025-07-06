@@ -1,34 +1,29 @@
 using System;
 using Application.Interfaces.Admin;
 using Domain.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
-namespace InvictusAPI.Presentation.Controllers.Admin.UserControllers;
+namespace InvictusAPI.Presentation.Controllers.Admin.CourseControllers;
 
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
-
-public class DeleteUserController : ControllerBase
+public class DeleteCourseController : ControllerBase
 {
-    private readonly IUserService _userService;
+    private readonly ICourseServices _courseServices;
     private readonly UserManager<User> _userManager;
-
-    public DeleteUserController(IUserService userService, UserManager<User> userManager)
+    public DeleteCourseController(ICourseServices courseServices, UserManager<User> userManager)
     {
         _userManager = userManager;
-        _userService = userService;
+        _courseServices = courseServices;
     }
 
-    [Authorize]
-    [HttpDelete("usuarios/delete/{id:guid}")]
-
-    public async Task<IActionResult> DeleteUser(Guid id)
+    [HttpDelete("cursos/delete/{id:guid}")]
+    [ApiExplorerSettings(GroupName = "Portal Admin")]
+    public async Task<IActionResult> DeleteCourseAsync(Guid id)
     {
-        
         try
         {
             var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
@@ -36,15 +31,14 @@ public class DeleteUserController : ControllerBase
             if (!autorizado)
                 return resultado;
 
-            var DeleteUser = await _userService.DeleteUserAsync(id);
+            var deleteToCourse = await _courseServices.DeleteCourseAsync(id);
 
-            return Ok(DeleteUser);
+            return Ok(deleteToCourse);
         }
         catch (Exception ex)
         {
             var message = ex.InnerException?.Message ?? ex.Message;
-            return BadRequest($"Erro ao deletar usuário: {message}");
+            return BadRequest($"Erro ao deletar o curso: {message}");
         }
     }
-
 }
