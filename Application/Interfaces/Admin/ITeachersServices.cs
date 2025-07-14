@@ -6,4 +6,5 @@ namespace Application.Interfaces.Admin;
 public interface ITeacherServices
 {
     Task<List<TeacherResponseDTO>> GetAllTeachers();
+    Task<TeacherResponseDTO> GetTeacherByID(Guid id);
 }

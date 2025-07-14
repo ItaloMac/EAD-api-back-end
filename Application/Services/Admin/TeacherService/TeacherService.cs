@@ -38,4 +38,20 @@ public class TeacherService : ITeacherServices
             throw new ApplicationException("Erro ao listar todos os professores", ex);
         }
     }
+
+    public async Task<TeacherResponseDTO> GetTeacherByID(Guid id)
+    {
+        try
+        {
+            var teacher = await _context.Professores.FirstOrDefaultAsync(p => p.Id == id);
+            if (teacher == null)
+            throw new ApplicationException("Professor não encontrado.");
+
+            return _mapper.Map<TeacherResponseDTO>(teacher);
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao listar o professor", ex);
+        }
+    }
 }
