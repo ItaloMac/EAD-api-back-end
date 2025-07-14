@@ -11,5 +11,8 @@ public class TeacherProfile : Profile
     {
         CreateMap<Professor, TeacherResponseDTO>();
         CreateMap<TeacherResponseDTO, Professor>();
+
+        CreateMap<Professor, CreateTeacherDTO>();
+        CreateMap<CreateTeacherDTO, Professor>();
     }
 }

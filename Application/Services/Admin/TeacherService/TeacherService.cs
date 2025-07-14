@@ -22,7 +22,29 @@ public class TeacherService : ITeacherServices
         _mapper = mapper;
         _userManager = userManager;
     }
-   
+
+    public async Task<CreateTeacherDTO> CreateTeacherAsync(CreateTeacherDTO dto)
+    {
+        try
+        {
+            var newTeacher = new Professor
+            {
+                Name = dto.Name,
+                MiniResume = dto.MiniResume,
+                ImagemUrl = dto.ImagemUrl
+            };
+
+            _context.Professores.Add(newTeacher);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<CreateTeacherDTO>(newTeacher);
+
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao criar o professor", ex);
+        }
+    }
+
     public async Task<List<TeacherResponseDTO>> GetAllTeachers()
     {
         try
