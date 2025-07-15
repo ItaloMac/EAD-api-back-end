@@ -76,4 +76,29 @@ public class TeacherService : ITeacherServices
             throw new ApplicationException("Erro ao listar o professor", ex);
         }
     }
+
+    public async Task<UpdateTeacherDTO> UpdateTeacherAsync(Guid id, UpdateTeacherDTO dto)
+    {
+        try
+        {
+            var teacherExisting = await _context.Professores.FirstOrDefaultAsync(r => r.Id == id);
+
+            if (teacherExisting == null)
+            {
+                throw new ApplicationException("Professor não encontrada.");
+            }
+
+            teacherExisting.Name = dto.Name;
+            teacherExisting.MiniResume = dto.MiniResume;
+            teacherExisting.ImagemUrl = dto.ImagemUrl;
+
+            _context.Professores.Update(teacherExisting);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<UpdateTeacherDTO>(teacherExisting);
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao atualizar o professor", ex);
+        }
+    }
 }

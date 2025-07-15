@@ -1,4 +1,3 @@
-using System;
 using Application.DTOs.Admin.Teacher;
 using AutoMapper;
 using Domain.Models;
@@ -14,5 +13,8 @@ public class TeacherProfile : Profile
 
         CreateMap<Professor, CreateTeacherDTO>();
         CreateMap<CreateTeacherDTO, Professor>();
+
+        CreateMap<Professor,UpdateTeacherDTO>();
+        CreateMap<UpdateTeacherDTO, Professor>();
     }
 }
