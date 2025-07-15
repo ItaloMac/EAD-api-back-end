@@ -1,4 +1,6 @@
+using System;
 using Application.Interfaces.Admin;
+using Application.Services.Admin.TeacherService;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -11,20 +13,20 @@ namespace InvictusAPI.Presentation.Controllers.Admin.TeacherController;
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
 
-public class DeleteTeacherController : ControllerBase
+public class GetAllCoursesTeacherController : ControllerBase
 {
     private readonly ITeacherServices _teacherService;
     private readonly UserManager<User> _userManager;
 
-    public DeleteTeacherController(ITeacherServices teacherService, UserManager<User> userManager)
+    public GetAllCoursesTeacherController(ITeacherServices teacherService, UserManager<User> userManager)
     {
         _userManager = userManager;
         _teacherService = teacherService;
     }
 
     [Authorize]
-    [HttpDelete("professores/delete/{id:guid}")]
-    public async Task<IActionResult> DeleteTeacherAsync(Guid id)
+    [HttpGet("professores/{id:guid}/cursos")]
+    public async Task<IActionResult> GetAllTeachersCourseAsync(Guid id)
     {
         try
         {
@@ -33,14 +35,14 @@ public class DeleteTeacherController : ControllerBase
             if (!autorizado)
                 return resultado;
 
-            var deleteTeacher = await _teacherService.DeleteTeacherAsync(id);
-            return Ok(deleteTeacher);
+            var listAllCourses = await _teacherService.GetCoursesByIdTeacherAsync(id);
+            return Ok(listAllCourses);
 
         }
         catch (Exception ex)
         {
             var message = ex.InnerException?.Message ?? ex.Message;
-            return BadRequest($"Erro ao excluir professor: {message}");
+            return BadRequest($"Erro ao listar todos cursos do professor: {message}");
         }
     }
 }

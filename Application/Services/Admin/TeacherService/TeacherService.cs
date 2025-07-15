@@ -1,4 +1,5 @@
 using System;
+using Application.DTOs.Admin.Course;
 using Application.DTOs.Admin.Teacher;
 using Application.Interfaces;
 using Application.Interfaces.Admin;
@@ -77,6 +78,36 @@ public class TeacherService : ITeacherServices
         catch (Exception ex)
         {
             throw new ApplicationException("Erro ao listar todos os professores", ex);
+        }
+    }
+
+    public async Task<List<TeacherCourseResponseDTO>> GetCoursesByIdTeacherAsync(Guid id)
+    {
+        try
+        {
+            var teacher = await _context.Professores.FirstOrDefaultAsync(c => c.Id == id);
+            if (teacher == null)
+            {
+                throw new ApplicationException("Professor não encontrado.");
+            }
+
+            var relatedCourses = await _context.CursoProfessores.
+            Where(cp => cp.Id_Professor == id)
+            .Select(cp => new TeacherCourseResponseDTO
+            {
+                Name = cp.Curso.Name,
+                Status = cp.Curso.Status,
+                Modality = cp.Curso.Modality,
+                Type = cp.Curso.Type
+                
+            })
+            .ToListAsync();
+            return relatedCourses;
+
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao listar os professores do curso", ex);
         }
     }
 
