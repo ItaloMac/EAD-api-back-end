@@ -9,4 +9,5 @@ public interface ITeacherServices
     Task<TeacherResponseDTO> GetTeacherByID(Guid id);
     Task<CreateTeacherDTO> CreateTeacherAsync(CreateTeacherDTO dto);
     Task<UpdateTeacherDTO> UpdateTeacherAsync(Guid id, UpdateTeacherDTO dto);
+    Task<bool> DeleteTeacherAsync(Guid id);
 }

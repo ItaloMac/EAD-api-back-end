@@ -45,6 +45,25 @@ public class TeacherService : ITeacherServices
         }
     }
 
+    public async Task<bool> DeleteTeacherAsync(Guid id)
+    {
+       try
+        {
+            var teacherToDelete = await _context.Professores.FirstOrDefaultAsync(r => r.Id == id);
+            if (teacherToDelete == null)
+            {
+                throw new ApplicationException("Professor não encontrado.");
+            }
+            _context.Professores.Remove(teacherToDelete);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao excluir professor", ex);
+        }
+    }
+
     public async Task<List<TeacherResponseDTO>> GetAllTeachers()
     {
         try
