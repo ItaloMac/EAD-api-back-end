@@ -40,4 +40,25 @@ public class ClassService : IClassServices
             throw new ApplicationException("Erro ao listar todas as turmas", ex);
         }
     }
+
+    public async Task<ClassResponseDTO> GetClassById(Guid id)
+    {
+        try
+        {
+            var Class = await _context.Classes
+            .Include(c => c.Curso)
+            .Include(r => r.Registrations)
+            .ProjectTo<ClassResponseDTO>(_mapper.ConfigurationProvider)
+            .FirstOrDefaultAsync(cl => cl.Id == id);
+
+            if (Class == null)
+                throw new ApplicationException("Turma não encontrada.");
+
+            return Class;
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao listar a turma", ex);
+        }
+    }
 }

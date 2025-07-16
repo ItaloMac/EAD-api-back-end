@@ -5,4 +5,5 @@ namespace Application.Interfaces.Admin;
 public interface IClassServices
 {
     Task<List<ClassResponseDTO>> GetAllClassesAsync();
+    Task<ClassResponseDTO> GetClassById(Guid id);
 }

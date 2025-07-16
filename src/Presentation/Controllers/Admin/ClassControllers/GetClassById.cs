@@ -1,3 +1,4 @@
+using System;
 using Application.Interfaces.Admin;
 using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
@@ -10,20 +11,20 @@ namespace InvictusAPI.Presentation.Controllers.Admin.ClassControllers;
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
 
-public class GetAllClassesController : ControllerBase
+public class GetClassByIdController : ControllerBase
 {
     private readonly IClassServices _classService;
     private readonly UserManager<User> _userManager;
 
-    public GetAllClassesController(IClassServices classService, UserManager<User> userManager)
+    public GetClassByIdController(IClassServices classService, UserManager<User> userManager)
     {
         _userManager = userManager;
         _classService = classService;
     }
 
     [Authorize]
-    [HttpGet("turmas/")]
-    public async Task<IActionResult> GetAllClassesAsync()
+    [HttpGet("turmas/{id:guid}")]
+     public async Task<IActionResult> GetClassByIdAsync(Guid id)
     {
         try
         {
@@ -32,14 +33,14 @@ public class GetAllClassesController : ControllerBase
             if (!autorizado)
                 return resultado;
 
-            var listAllClasses = await _classService.GetAllClassesAsync();
-            return Ok(listAllClasses);
+            var listClass= await _classService.GetClassById(id);
+            return Ok(listClass);
 
         }
         catch (Exception ex)
         {
             var message = ex.InnerException?.Message ?? ex.Message;
-            return BadRequest($"Erro ao listar todos as turmas: {message}");
+            return BadRequest($"Erro ao listar a turma: {message}");
         }
     }
 }
