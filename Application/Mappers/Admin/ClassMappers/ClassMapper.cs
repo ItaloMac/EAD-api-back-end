@@ -1,4 +1,3 @@
-using System;
 using Application.DTOs.Admin.Class;
 using AutoMapper;
 using Domain.Models;
@@ -21,5 +20,17 @@ public class ClassProfile : Profile
                     Id = r.Id
                 }).ToList()
             ));
+
+        CreateMap<Class, CreateClassDTO>()
+    .ForMember(dest => dest.RelatedCourse, opt => opt.MapFrom(src => new RelatedCourseDTO
+    {
+        Id = src.Curso!.Id
+    }))
+    .ForMember(dest => dest.RelatedRegistrations, opt => opt.MapFrom(src =>
+        src.Registrations.Select(r => new RelatedRegistrationDTO
+        {
+            Id = r.Id
+        }).ToList()
+    ));
     }
 }

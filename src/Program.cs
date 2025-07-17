@@ -136,10 +136,10 @@ builder.Services.AddScoped<IModuloService, ModuloService>();
 builder.Services.AddScoped<IContactService, ContactService>();
 builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IRegistrationService, RegistrationServices>();
 builder.Services.AddScoped<ICourseServices, CourseService>();
 builder.Services.AddScoped<ITeacherServices, TeacherService>();
 builder.Services.AddScoped<IClassServices, ClassService>();
+builder.Services.AddScoped<IRegistrationService, RegistrationServices>();
 
 builder.Services
     .AddAuthentication(options =>

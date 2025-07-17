@@ -10,18 +10,18 @@ public class Registration
 
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
-    public required DateTime RegistrationDate { get; set; }
+    public DateTime RegistrationDate { get; set; }
 
     [DataType(DataType.Date)]
     [DisplayFormat(DataFormatString = "{0:dd-MM-yyyy}", ApplyFormatInEditMode = true)]
     public DateTime? CancellationDate { get; set; }
 
     [ForeignKey("User")]
-    public required Guid UserId { get; set; }
+    public Guid UserId { get; set; }
     public virtual User User { get; set; }  = null!;
 
     [ForeignKey("Class")]
-    public required Guid ClassId { get; set; }
+    public Guid ClassId { get; set; }
     public virtual Class Class { get; set; }  = null!;
 
     [Column(TypeName = "varchar(10)")]

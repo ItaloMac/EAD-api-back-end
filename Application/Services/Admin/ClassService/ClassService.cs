@@ -23,6 +23,34 @@ public class ClassService : IClassServices
         _userManager = userManager;
     }
 
+    public async Task<CreateClassDTO> CreateClassAsync(CreateClassDTO dto)
+    {
+        try
+        {
+            var registrationIds = dto.RelatedRegistrations.Select(r => r.Id).ToList();
+            var registrations = await _context.Registrations
+                .Where(r => registrationIds.Contains(r.Id))
+                .ToListAsync();
+
+            var newClass = new Class
+            {
+                Name = dto.Name,
+                StartDate = dto.StartDate,
+                EndDate = dto.EndDate,
+                CursoId = dto.RelatedCourse.Id,
+                Registrations = registrations
+            };
+
+            _context.Classes.Add(newClass);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<CreateClassDTO>(newClass);
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao criar a turma", ex);
+        }
+    }
+
     public async Task<List<ClassResponseDTO>> GetAllClassesAsync()
     {
         try
