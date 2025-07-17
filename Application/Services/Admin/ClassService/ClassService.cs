@@ -89,4 +89,36 @@ public class ClassService : IClassServices
             throw new ApplicationException("Erro ao listar a turma", ex);
         }
     }
+
+    public async Task<CreateClassDTO> UpdateClassAsync(Guid id, CreateClassDTO dto)
+    {
+        try
+        {
+            var classExisting = await _context.Classes.FirstOrDefaultAsync(r => r.Id == id);
+
+            if (classExisting == null)
+            {
+                throw new ApplicationException("Turma não encontrada.");
+            }
+
+            var registrationIds = dto.RelatedRegistrations.Select(r => r.Id).ToList();
+            var registrations = await _context.Registrations
+                .Where(r => registrationIds.Contains(r.Id))
+                .ToListAsync();
+
+            classExisting.Name = dto.Name;
+            classExisting.StartDate = dto.StartDate;
+            classExisting.EndDate = dto.EndDate;
+            classExisting.CursoId= dto.RelatedCourse.Id;
+            classExisting.Registrations = registrations;
+
+            _context.Classes.Update(classExisting);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<CreateClassDTO>(classExisting);
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao atualizar a turma", ex);
+        }
+    }
 }
