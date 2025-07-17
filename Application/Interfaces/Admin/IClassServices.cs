@@ -8,4 +8,5 @@ public interface IClassServices
     Task<ClassResponseDTO> GetClassById(Guid id);
     Task<CreateClassDTO> CreateClassAsync(CreateClassDTO dto);
     Task<CreateClassDTO> UpdateClassAsync(Guid id, CreateClassDTO dto);
+    Task<bool> DeleteClassAsync(Guid id);
 }

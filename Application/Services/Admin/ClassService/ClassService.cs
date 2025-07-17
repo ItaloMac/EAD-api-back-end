@@ -51,6 +51,24 @@ public class ClassService : IClassServices
         }
     }
 
+    public async Task<bool> DeleteClassAsync(Guid id)
+    {
+        try{
+            var classToDelete = await _context.Classes.FirstOrDefaultAsync(c => c.Id == id);
+            if (classToDelete == null)
+            {
+                throw new ApplicationException("Turma não encontrada.");
+            }
+            _context.Classes.Remove(classToDelete);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao deletar a turma", ex);
+        }
+    }
+
     public async Task<List<ClassResponseDTO>> GetAllClassesAsync()
     {
         try
