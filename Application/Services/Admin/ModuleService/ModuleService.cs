@@ -1,3 +1,4 @@
+using System.Reflection;
 using Application.DTOs.Admin.Module;
 using Application.Interfaces;
 using Application.Interfaces.Admin;
@@ -19,6 +20,23 @@ public class ModuleService : IModuleService
         _context = context;
         _mapper = mapper;
         _userManager = userManager;
+    }
+
+    public async Task<CreateModuleDTO> CreateModuleAsync(CreateModuleDTO dto)
+    {
+        try
+        {
+            var newModule = _mapper.Map<Domain.Models.Modulo>(dto);
+
+            _context.Modulos.Add(newModule);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<CreateModuleDTO>(newModule);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Ocorreu ao criar o modulo", ex);
+        }
     }
 
     public async Task<List<ModuleResponseDTO>> GetAllModulesAsync()
@@ -59,6 +77,28 @@ public class ModuleService : IModuleService
         catch (Exception ex)
         {
             throw new Exception($"Ocorreu ao buscar o modulo com ID {id}", ex);
+        }
+    }
+
+    public async Task<CreateModuleDTO> UpdateModuleAsync(Guid id, CreateModuleDTO dto)
+    {
+        try
+        {
+            var existingModule = await _context.Modulos.FindAsync(id);
+            if (existingModule == null)
+            {
+                throw new Exception("Modulo não encontrado");
+            }
+
+            _mapper.Map(dto, existingModule);
+            _context.Modulos.Update(existingModule);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<CreateModuleDTO>(existingModule);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Ocorreu ao atualizar o modulo com ID {id}", ex);
         }
     }
 }
