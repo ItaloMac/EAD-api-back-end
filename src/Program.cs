@@ -15,6 +15,7 @@ using Application.Services.Admin;
 using InvictusAPI.swagger;
 using Application.Services.Admin.TeacherService;
 using Application.Services.Admin.ClassService;
+using Application.Services.Admin.ModuleService;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -140,6 +141,8 @@ builder.Services.AddScoped<ICourseServices, CourseService>();
 builder.Services.AddScoped<ITeacherServices, TeacherService>();
 builder.Services.AddScoped<IClassServices, ClassService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationServices>();
+builder.Services.AddScoped<IModuleService, ModuleService>();
+
 
 builder.Services
     .AddAuthentication(options =>
