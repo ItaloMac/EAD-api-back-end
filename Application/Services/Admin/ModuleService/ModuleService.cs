@@ -39,6 +39,27 @@ public class ModuleService : IModuleService
         }
     }
 
+    public async Task<bool> DeleteModuleAsync(Guid id)
+    {
+        try
+        {
+            var module = await _context.Modulos.FindAsync(id);
+            if (module == null)
+            {
+                throw new Exception("Modulo não encontrado");
+            }
+
+            _context.Modulos.Remove(module);
+            await _context.SaveChangesAsync();
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Ocorreu ao deletar o modulo com ID {id}", ex);
+        }
+    }
+
     public async Task<List<ModuleResponseDTO>> GetAllModulesAsync()
     {
         try

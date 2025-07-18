@@ -1,28 +1,27 @@
-using Application.DTOs.Admin.Module;
+using System;
 using Application.Interfaces.Admin;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.ModuleControllers;
-
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
-public class CreateModuleController : ControllerBase
+public class DeleteModuleController : ControllerBase
 {
     private readonly IModuleService _moduleService;
     private readonly UserManager<User> _userManager;
 
-    public CreateModuleController(IModuleService moduleService, UserManager<User> userManager)
+    public DeleteModuleController(IModuleService moduleService, UserManager<User> userManager)
     {
         _moduleService = moduleService;
         _userManager = userManager;
     }
 
-    [HttpPost("modulos/create")]
-    public async Task<IActionResult> CreateModuleAsync([FromBody] CreateModuleDTO module)
+    [HttpDelete("modulos/{id:guid}/delete")]
+    public async Task<IActionResult> DeleteModuleAsync(Guid id)
     {
         try
         {
@@ -31,16 +30,14 @@ public class CreateModuleController : ControllerBase
             if (!autorizado)
                 return resultado;
 
-            if (module == null)
-                return BadRequest("Módulo inválido.");
+            var deletedModule = await _moduleService.DeleteModuleAsync(id);
 
-            var createdModule = await _moduleService.CreateModuleAsync(module);
-            return Ok(createdModule);
+            return Ok("Módulo deletado com sucesso.");
         }
         catch (Exception ex)
         {
             var message = ex.InnerException?.Message ?? ex.Message;
-            return BadRequest($"Erro ao criar módulo: {message}");
+            return BadRequest($"Erro ao deletar módulo: {message}");
         }
     }
 }
