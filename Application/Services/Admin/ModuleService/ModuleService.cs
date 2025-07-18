@@ -4,6 +4,7 @@ using Application.Interfaces.Admin;
 using AutoMapper;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.Admin.ModuleService;
 
@@ -20,17 +21,44 @@ public class ModuleService : IModuleService
         _userManager = userManager;
     }
 
-    public Task<List<ModuleResponseDTO>> GetAllModulesAsync()
+    public async Task<List<ModuleResponseDTO>> GetAllModulesAsync()
     {
         try
         {
-            var modules = _context.Modulos.ToList();
-            var moduleDtos = _mapper.Map<List<ModuleResponseDTO>>(modules);
-            return Task.FromResult(moduleDtos);
+           var modulos = await _context.Modulos
+        .Include(m => m.Curso)
+        .Include(m => m.Professor)
+        .Include(m => m.Aulas)
+        .ToListAsync();
+
+        return _mapper.Map<List<ModuleResponseDTO>>(modulos);
         }
         catch (Exception ex)
         {
             throw new Exception("Ocorreu ao listar todos os modulos", ex);
         }
    }
+
+    public Task<ModuleResponseDTO> GetModuleByIdAsync(Guid id)
+    {
+        try
+        {
+            var module = _context.Modulos
+            .Include(m => m.Curso)
+            .Include(m => m.Professor)
+            .Include(m => m.Aulas)
+            .FirstOrDefault(m => m.Id == id);
+
+            if (module == null)
+            {
+                throw new Exception("Modulo não encontrado");
+            }
+            var moduleDto = _mapper.Map<ModuleResponseDTO>(module);
+            return Task.FromResult(moduleDto);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Ocorreu ao buscar o modulo com ID {id}", ex);
+        }
+    }
 }
