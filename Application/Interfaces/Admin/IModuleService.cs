@@ -9,5 +9,6 @@ public interface IModuleService
     Task<CreateModuleDTO> CreateModuleAsync(CreateModuleDTO dto);
     Task<CreateModuleDTO> UpdateModuleAsync(Guid id, CreateModuleDTO dto);
     Task<bool> DeleteModuleAsync(Guid id);
+    Task<AssignTeacherToModuleDTO> AssignTeacherToModuleAsync(Guid moduleId, Guid teacherId);
 }
 

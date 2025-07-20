@@ -55,5 +55,9 @@ public class ModuleProfile : Profile
             .ForMember(dest => dest.Aulas, opt => opt.MapFrom(src =>
                 src.Aulas.Select(a => new AulaDTO { Id = a.Id }).ToList()
             ));
+
+        
+        CreateMap<Domain.Models.Modulo, AssignTeacherToModuleDTO>();
+        CreateMap<AssignTeacherToModuleDTO, Domain.Models.Modulo>();
     }
 }

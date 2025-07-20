@@ -22,6 +22,35 @@ public class ModuleService : IModuleService
         _userManager = userManager;
     }
 
+    public async Task<AssignTeacherToModuleDTO> AssignTeacherToModuleAsync(Guid moduleId, Guid teacherId)
+    {
+
+        try
+        {
+            var module = await _context.Modulos.FindAsync(moduleId);
+            if (module == null)
+            {
+                throw new Exception("Modulo não encontrado");
+            }
+
+            var teacher = await _context.Professores.Where(t => t.Id == teacherId).FirstOrDefaultAsync();
+            if (teacher == null)
+            {
+                throw new Exception("Professor não encontrado");
+            }
+
+            module.Professor = teacher;
+            _context.Modulos.Update(module);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<AssignTeacherToModuleDTO>(module);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception($"Ocorreu ao atribuir o professor ao modulo com ID {moduleId}", ex);
+        }
+    }
+
     public async Task<CreateModuleDTO> CreateModuleAsync(CreateModuleDTO dto)
     {
         try
