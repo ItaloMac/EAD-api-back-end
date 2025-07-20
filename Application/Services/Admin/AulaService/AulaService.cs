@@ -1,13 +1,15 @@
 using System;
 using Application.DTOs;
+using Application.DTOs.Admin.Aula;
 using Application.Interfaces;
+using Application.Interfaces.Admin;
 using AutoMapper;
 using Domain.Models;
 using Microsoft.AspNetCore.Identity;
 
 namespace Application.Services.Admin.AulaService;
 
-public class AulaService : IAulaService
+public class AulaService : IAulasService
 {
     private readonly UserManager<User> _userManager; 
     private readonly IApplicationDbContext _context;
@@ -20,13 +22,31 @@ public class AulaService : IAulaService
         _userManager = userManager;
     }
 
-    public Task<List<AulaDTO>> GetAllAulas()
+    public Task<AulaResponseDTO> GetAulaByIdAsync(Guid id)
+    {
+        try
+        {
+            var aula = _context.Aulas.Find(id);
+            if (aula == null)
+            {
+                throw new Exception("Aula não encontrada.");
+            }
+            var aulaResponseDTO = _mapper.Map<AulaResponseDTO>(aula);
+            return Task.FromResult(aulaResponseDTO);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Ocorreu um erro ao buscar a aula.", ex);
+        }
+    }
+
+    Task<List<AulaResponseDTO>> IAulasService.GetAllAulasAsync()
     {
         try
         {
             var aulas = _context.Aulas.ToList();
-            var aulaDtos = _mapper.Map<List<AulaDTO>>(aulas);
-            return Task.FromResult(aulaDtos);
+            var aulaResponseDTOs = _mapper.Map<List<AulaResponseDTO>>(aulas);
+            return Task.FromResult(aulaResponseDTOs);
         }
         catch (Exception ex)
         {

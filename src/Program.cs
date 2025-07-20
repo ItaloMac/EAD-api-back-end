@@ -143,7 +143,7 @@ builder.Services.AddScoped<ITeacherServices, TeacherService>();
 builder.Services.AddScoped<IClassServices, ClassService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationServices>();
 builder.Services.AddScoped<IModuleService, ModuleService>();
-builder.Services.AddScoped<Application.Interfaces.IAulaService, AulaService>();
+builder.Services.AddScoped<IAulasService, AulaService>();
 
 
 builder.Services
