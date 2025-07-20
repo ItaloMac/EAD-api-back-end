@@ -1,5 +1,3 @@
-using System;
-using Application.DTOs;
 using Application.DTOs.Admin.Aula;
 using Application.Interfaces;
 using Application.Interfaces.Admin;
@@ -20,6 +18,22 @@ public class AulaService : IAulasService
         _context = context;
         _mapper = mapper;
         _userManager = userManager;
+    }
+
+    public async Task<CreateAulaDTO> CreateAulaAsync(CreateAulaDTO createAulaDTO)
+    {
+        try
+        {
+            var aula = _mapper.Map<Aula>(createAulaDTO);
+            _context.Aulas.Add(aula);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<CreateAulaDTO>(aula);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Ocorreu um erro ao criar a aula.", ex);
+        }
     }
 
     public Task<AulaResponseDTO> GetAulaByIdAsync(Guid id)

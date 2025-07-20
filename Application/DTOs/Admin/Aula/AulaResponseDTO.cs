@@ -2,6 +2,7 @@ namespace Application.DTOs.Admin.Aula;
 
 public class AulaResponseDTO
 {
+    public Guid Id { get; set; }
     public string Theme { get; set; } = null!;
 
     public string StartDate { get; set; } = null!;

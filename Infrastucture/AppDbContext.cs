@@ -45,6 +45,12 @@ namespace Infrastucture;public class ApplicationDbContext : IdentityDbContext<Us
             .HasForeignKey(c => c.CoordenadorId)
             .OnDelete(DeleteBehavior.Cascade);
 
+        modelBuilder.Entity<Aula>()
+            .HasOne(a => a.Modulo)
+            .WithMany(m => m.Aulas)
+            .HasForeignKey(a => a.ModuloId)
+            .OnDelete(DeleteBehavior.Cascade);
+
         modelBuilder.Entity<User>()
             .HasIndex(u => u.Email)
             .IsUnique();
