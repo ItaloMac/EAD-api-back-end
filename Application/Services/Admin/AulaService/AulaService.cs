@@ -54,6 +54,28 @@ public class AulaService : IAulasService
         }
     }
 
+    public async Task<CreateAulaDTO> UpdateAulaAsync(Guid id, CreateAulaDTO updateAulaDTO)
+    {
+        try
+        {
+            var aula = _context.Aulas.Find(id);
+            if (aula == null)
+            {
+                throw new Exception("Aula não encontrada.");
+            }
+
+            _mapper.Map(updateAulaDTO, aula);
+            _context.Aulas.Update(aula);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<CreateAulaDTO>(aula);
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Ocorreu um erro ao atualizar a aula.", ex);
+        }
+    }
+
     Task<List<AulaResponseDTO>> IAulasService.GetAllAulasAsync()
     {
         try

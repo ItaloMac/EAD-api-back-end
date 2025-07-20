@@ -8,4 +8,5 @@ public interface IAulasService
     Task<List<AulaResponseDTO>> GetAllAulasAsync();
     Task<AulaResponseDTO> GetAulaByIdAsync(Guid id);
     Task<CreateAulaDTO> CreateAulaAsync(CreateAulaDTO createAulaDTO);
+    Task<CreateAulaDTO> UpdateAulaAsync(Guid id, CreateAulaDTO updateAulaDTO);
 }
