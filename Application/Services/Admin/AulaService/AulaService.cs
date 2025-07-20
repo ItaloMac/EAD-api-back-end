@@ -36,6 +36,26 @@ public class AulaService : IAulasService
         }
     }
 
+    public async Task<bool> DeleteAulaAsync(Guid id)
+    {
+        try
+        {
+            var aula = _context.Aulas.Find(id);
+            if (aula == null)
+            {
+                throw new Exception("Aula não encontrada.");
+            }
+
+            _context.Aulas.Remove(aula);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        catch (Exception ex)
+        {
+            throw new Exception("Ocorreu um erro ao deletar a aula.", ex);
+        }
+    }
+
     public Task<AulaResponseDTO> GetAulaByIdAsync(Guid id)
     {
         try
