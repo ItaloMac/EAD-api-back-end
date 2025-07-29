@@ -3,11 +3,11 @@ using Domain.Models;
 using Microsoft.EntityFrameworkCore;
 using webAPI.Domain.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
 
-namespace Infrastucture;public class ApplicationDbContext : IdentityDbContext<User, IdentityRole<Guid>, Guid>, IApplicationDbContext
+namespace Infrastucture;
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
-    public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+   public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
         : base(options)
     {
     }
@@ -19,9 +19,10 @@ namespace Infrastucture;public class ApplicationDbContext : IdentityDbContext<Us
     public DbSet<CursoProfessor> CursoProfessores { get; set; }
     public DbSet<Contact> Contacts { get; set; }
     public DbSet<Address> Addresses { get; set; }
-    public DbSet<User> User { get; set; }
+    public DbSet<User> Users { get; set; }
     public DbSet<Registration> Registrations { get; set; }
     public DbSet<Class> Classes { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -62,11 +63,11 @@ namespace Infrastucture;public class ApplicationDbContext : IdentityDbContext<Us
         modelBuilder.Entity<User>()
             .HasIndex(u => u.CPF)
             .IsUnique();
-        
-       modelBuilder.Entity<User>()
-            .Property(u => u.UserType)
-            .HasDefaultValue(UserType.Aluno) // Valor padrão explícito
-            .HasConversion<int>() // Converte para int no banco
-            .HasSentinel((UserType)(-1)); // Valor sentinela que nunca será usado
+
+        modelBuilder.Entity<User>()
+             .Property(u => u.UserType)
+             .HasDefaultValue(UserType.Aluno) // Valor padrão explícito
+             .HasConversion<int>() // Converte para int no banco
+             .HasSentinel((UserType)(-1)); // Valor sentinela que nunca será usado
     }
 }

@@ -1,7 +1,5 @@
 using Application.Interfaces.Admin;
-using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.AulaController;
@@ -12,12 +10,12 @@ namespace InvictusAPI.Presentation.Controllers.Admin.AulaController;
 public class GetAllAulasController : ControllerBase
 {
     private readonly IAulasService _aulasService;
-    private readonly UserManager<User> _userManager;
+    private readonly IUserService _userService;
 
-    public GetAllAulasController(IAulasService aulasService, UserManager<User> userManager)
+    public GetAllAulasController(IAulasService aulasService, IUserService userService)
     {
-        _userManager = userManager;
         _aulasService = aulasService;
+        _userService = userService;
     }
 
     [Authorize]
@@ -26,7 +24,7 @@ public class GetAllAulasController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

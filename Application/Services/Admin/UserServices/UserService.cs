@@ -3,7 +3,6 @@ using Application.DTOs.Admin.User;
 using Application.Interfaces;
 using AutoMapper;
 using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using AutoMapper.QueryableExtensions;
 
@@ -11,28 +10,54 @@ namespace Application.Services.Admin.UserServices;
 
 public class UserService : Interfaces.Admin.IUserService
 {
-    private readonly UserManager<User> _userManager;
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
 
-    public UserService(IApplicationDbContext context, IMapper mapper, UserManager<User> userManager)
+    public UserService(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
-        _userManager = userManager;
     }
 
-    public Task<UserResponseDTO> CreateUserAsync(UserResponseDTO user)
+    public async Task<UserResponseDTO> CreateUserAsync(UserResponseDTO user)
     {
-        throw new NotImplementedException();
+        try
+        {
+            if (await _context.Users.AnyAsync(u => u.Email == user.Email))
+            {
+                throw new Exception("E-mail já cadastrado.");
+            }
+
+            if (await _context.Users.AnyAsync(u => u.CPF == user.CPF))
+            {
+                throw new Exception("CPF já cadastrado.");
+            }
+
+            var newUser = _mapper.Map<User>(user);
+            newUser.BirthDate = string.IsNullOrWhiteSpace(user.BirthDate)
+                ? null
+                : DateTime.ParseExact(user.BirthDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+
+            var result = await _context.Users.AddAsync(newUser);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<UserResponseDTO>(result.Entity);
+        }
+        catch (Exception ex)
+        {
+            throw new ApplicationException("Erro ao criar usuário.", ex);
+        }
     }
+    
 
     public async Task<IEnumerable<UserResponseDTO?>> GetAllUsers()
     {
 
         try
         {
-            var users = await _userManager.Users.ToListAsync();
+            var users = await _context.Users
+                .ProjectTo<UserResponseDTO>(_mapper.ConfigurationProvider)
+                .ToListAsync();
 
             if (users == null || !users.Any())
                 throw new Exception("Nenhum usuário encontrado.");
@@ -49,7 +74,8 @@ public class UserService : Interfaces.Admin.IUserService
     {
         try
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
             if (user == null)
                 throw new Exception("Usuário não encontrado.");
 
@@ -65,17 +91,18 @@ public class UserService : Interfaces.Admin.IUserService
     {
         try
         {
-            var existingUser = _userManager.FindByIdAsync(id.ToString()).Result;
+            var existingUser = _context.Users
+                .FirstOrDefault(u => u.Id == id);
+
             if (existingUser == null)
                 throw new Exception("Usuário não encontrado.");
 
-            if (await _userManager.FindByEmailAsync(user.Email) != null &&
-              existingUser.Email != user.Email)
+            if (await _context.Users.Where(m => m.Email == existingUser.Email && m.Id != id).AnyAsync())
             {
                 throw new Exception("E-mail já cadastrado.");
             }
 
-            if (await _userManager.Users.AnyAsync(u => u.CPF == user.CPF && u.Id != id))
+            if (await _context.Users.Where(c => c.CPF == existingUser.CPF && c.Id != id).AnyAsync())
             {
                 throw new Exception("CPF já cadastrado.");
             }
@@ -91,10 +118,8 @@ public class UserService : Interfaces.Admin.IUserService
             existingUser.UserType = user.UserType ?? existingUser.UserType;
             existingUser.VindiCustomerId = user.VindiCustomerId;
 
-            var result = _userManager.UpdateAsync(existingUser).Result;
-
-            if (!result.Succeeded)
-                throw new Exception("Erro ao atualizar usuário: " + string.Join(", ", result.Errors.Select(e => e.Description)));
+            var result = _context.Users.Update(existingUser);
+            await _context.SaveChangesAsync();
 
             return await Task.FromResult(_mapper.Map<UserResponseDTO>(existingUser));
         }
@@ -108,17 +133,16 @@ public class UserService : Interfaces.Admin.IUserService
     {
         try
         {
-            var user = await _userManager.FindByIdAsync(id.ToString());
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == id);
+
             if (user == null)
                 throw new Exception("Usuário não encontrado.");
 
-            var deleteUser = await _userManager.DeleteAsync(user);
-            if (!deleteUser.Succeeded)
-                throw new Exception("Erro ao deletar usuário: " + string.Join(", ", deleteUser.Errors.Select(e => e.Description)));
-
-            var userDto = _mapper.Map<UserResponseDTO>(user);
-            return userDto;
-            
+            var deleteUser = await _context.Users
+                .Where(u => u.Id == id)
+                .ExecuteDeleteAsync();
+            return _mapper.Map<UserResponseDTO>(user);
         }
         catch (Exception ex)
         {
@@ -130,7 +154,9 @@ public class UserService : Interfaces.Admin.IUserService
     {
         try
         {
-            var user = await _userManager.FindByIdAsync(userId.ToString());
+            var user = await _context.Users
+                .FirstOrDefaultAsync(u => u.Id == userId);
+
             if (user == null)
                 throw new Exception("Usuário não encontrado.");
 

@@ -1,25 +1,20 @@
-using System.Reflection;
 using Application.DTOs.Admin.Module;
 using Application.Interfaces;
 using Application.Interfaces.Admin;
 using AutoMapper;
-using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.Admin.ModuleService;
 
 public class ModuleService : IModuleService
 {
-    private readonly UserManager<User> _userManager;
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
 
-    public ModuleService(IApplicationDbContext context, IMapper mapper, UserManager<User> userManager)
+    public ModuleService(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
-        _userManager = userManager;
     }
 
     public async Task<AssignTeacherToModuleDTO> AssignTeacherToModuleAsync(Guid moduleId, Guid teacherId)

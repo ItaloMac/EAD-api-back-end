@@ -13,17 +13,15 @@ namespace InvictusAPI.Presentation.Controllers.Admin.UserControllers;
 public class GetUserById : ControllerBase
 {
     private readonly IUserService _userService;
-    private readonly UserManager<User> _userManager;
-    public GetUserById(IUserService userService, UserManager<User> userManager)
+    public GetUserById(IUserService userService)
     {
-        _userManager = userManager;
         _userService = userService;
     }
 
     [HttpGet("usuarios/{id:guid}")]
     public async Task<IActionResult> GetUserByIdAsync(Guid id)
     {
-        var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+        var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
         if (!autorizado)
             return resultado;
 

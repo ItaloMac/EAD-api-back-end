@@ -1,10 +1,7 @@
 using Application.Interfaces.Admin;
-using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.RegistrationControllers;
-
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
@@ -13,11 +10,11 @@ namespace InvictusAPI.Presentation.Controllers.Admin.RegistrationControllers;
 public class DeleteRegistrationController : ControllerBase
 {
     private readonly IRegistrationService _registrationService;
-    private readonly UserManager<User> _userManager;
-    public DeleteRegistrationController(IRegistrationService registrationService, UserManager<User> userManager)
+    private readonly IUserService _userService;
+    public DeleteRegistrationController(IRegistrationService registrationService, IUserService userService)
     {
-        _userManager = userManager;
         _registrationService = registrationService;
+        _userService = userService;
     }
 
     [HttpDelete("matricula/delete/{id:guid}")]
@@ -25,7 +22,7 @@ public class DeleteRegistrationController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

@@ -3,21 +3,18 @@ using Application.Interfaces;
 using Application.Interfaces.Admin;
 using AutoMapper;
 using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 
 namespace Application.Services.Admin.AulaService;
 
 public class AulaService : IAulasService
 {
-    private readonly UserManager<User> _userManager; 
     private readonly IApplicationDbContext _context;
     private readonly IMapper _mapper;
 
-    public AulaService(IApplicationDbContext context, IMapper mapper, UserManager<User> userManager)
+    public AulaService(IApplicationDbContext context, IMapper mapper)
     {
         _context = context;
         _mapper = mapper;
-        _userManager = userManager;
     }
 
     public async Task<CreateAulaDTO> CreateAulaAsync(CreateAulaDTO createAulaDTO)

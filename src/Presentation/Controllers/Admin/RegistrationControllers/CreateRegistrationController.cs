@@ -1,25 +1,20 @@
 using Application.DTOs.Admin.Registration;
 using Application.Interfaces.Admin;
-using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.RegistrationControllers;
-
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
-
-
 public class CreateRegistrationController : ControllerBase
 {
     private readonly IRegistrationService _registrationService;
-    private readonly UserManager<User> _userManager;
-    public CreateRegistrationController(IRegistrationService registrationService, UserManager<User> userManager)
+    private readonly IUserService _userService;
+    public CreateRegistrationController(IRegistrationService registrationService, IUserService userService)
     {
-        _userManager = userManager;
         _registrationService = registrationService;
+        _userService = userService;
     }
 
     [HttpPost("matriculas/create")]
@@ -27,7 +22,7 @@ public class CreateRegistrationController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

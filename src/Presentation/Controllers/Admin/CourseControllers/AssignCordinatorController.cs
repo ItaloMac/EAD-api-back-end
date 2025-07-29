@@ -1,12 +1,8 @@
-using System;
 using Application.DTOs.Admin.Course;
 using Application.Interfaces.Admin;
-using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.CourseControllers;
-
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
@@ -14,11 +10,11 @@ namespace InvictusAPI.Presentation.Controllers.Admin.CourseControllers;
 public class AssignCordinatorController : ControllerBase
 {
     private readonly ICourseServices _courseServices;
-    private readonly UserManager<User> _userManager;
-    public AssignCordinatorController(ICourseServices courseServices, UserManager<User> userManager)
+    private readonly IUserService _userService;
+    public AssignCordinatorController(ICourseServices courseServices, IUserService userService)
     {
-        _userManager = userManager;
         _courseServices = courseServices;
+        _userService = userService;
     }
 
     [HttpPost("cursos/{CourseId:guid}/coordenador")]
@@ -26,7 +22,7 @@ public class AssignCordinatorController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

@@ -1,8 +1,5 @@
-using System;
 using Application.Interfaces.Admin;
-using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.ClassControllers;
@@ -10,16 +7,15 @@ namespace InvictusAPI.Presentation.Controllers.Admin.ClassControllers;
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
-
 public class GetClassByIdController : ControllerBase
 {
     private readonly IClassServices _classService;
-    private readonly UserManager<User> _userManager;
+    private readonly IUserService _userService;
 
-    public GetClassByIdController(IClassServices classService, UserManager<User> userManager)
+    public GetClassByIdController(IClassServices classService, IUserService userService)
     {
-        _userManager = userManager;
         _classService = classService;
+        _userService = userService;
     }
 
     [Authorize]
@@ -28,7 +24,7 @@ public class GetClassByIdController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

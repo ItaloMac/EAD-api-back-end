@@ -1,12 +1,8 @@
-using System;
 using Application.DTOs.Admin.Course;
 using Application.Interfaces.Admin;
-using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.CourseControllers;
-
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
@@ -14,11 +10,12 @@ namespace InvictusAPI.Presentation.Controllers.Admin.CourseControllers;
 public class AssignTeacherToCourseController : ControllerBase
 {
     private readonly ICourseServices _courseServices;
-    private readonly UserManager<User> _userManager;
-    public AssignTeacherToCourseController(ICourseServices courseServices, UserManager<User> userManager)
+    private readonly IUserService _userService;
+
+    public AssignTeacherToCourseController(ICourseServices courseServices, IUserService userService)
     {
-        _userManager = userManager;
         _courseServices = courseServices;
+        _userService = userService;
     }
 
     [HttpPost("cursos/adicionar-professor/{CourseId:guid}")]
@@ -26,7 +23,7 @@ public class AssignTeacherToCourseController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

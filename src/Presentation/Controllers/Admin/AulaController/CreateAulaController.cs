@@ -14,12 +14,12 @@ namespace InvictusAPI.Presentation.Controllers.Admin.AulaController;
 public class CreateAulaController : ControllerBase
 {
     private readonly IAulasService _aulasService;
-    private readonly UserManager<User> _userManager;
+    private readonly IUserService _userService;
 
-    public CreateAulaController(IAulasService aulasService, UserManager<User> userManager)
+    public CreateAulaController(IAulasService aulasService, IUserService userService)
     {
-        _userManager = userManager;
         _aulasService = aulasService;
+        _userService = userService;
     }
 
     [Authorize]
@@ -28,7 +28,7 @@ public class CreateAulaController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

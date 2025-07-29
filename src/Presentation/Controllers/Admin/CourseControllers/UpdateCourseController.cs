@@ -1,25 +1,20 @@
-using System;
 using Application.DTOs.Admin.Course;
 using Application.Interfaces.Admin;
-using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.CourseControllers;
-
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
-
 public class UpdateCourseController : ControllerBase
 {
     private readonly ICourseServices _courseServices;
-    private readonly UserManager<User> _userManager;
-    public UpdateCourseController(ICourseServices courseServices, UserManager<User> userManager)
+    private readonly IUserService _userService;
+    public UpdateCourseController(ICourseServices courseServices, IUserService userService)
     {
-        _userManager = userManager;
         _courseServices = courseServices;
+        _userService = userService;
     }
 
     [HttpPut("cursos/update/{id:guid}")]
@@ -28,7 +23,7 @@ public class UpdateCourseController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

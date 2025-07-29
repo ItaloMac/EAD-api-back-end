@@ -12,11 +12,11 @@ namespace InvictusAPI.Presentation.Controllers.Admin.CourseControllers;
 public class DeleteTeacherFromCourseController : ControllerBase
 {
     private readonly ICourseServices _courseServices;
-    private readonly UserManager<User> _userManager;
-    public DeleteTeacherFromCourseController(ICourseServices courseServices, UserManager<User> userManager)
+    private readonly IUserService _userService;
+    public DeleteTeacherFromCourseController(ICourseServices courseServices, IUserService userService)
     {
-        _userManager = userManager;
         _courseServices = courseServices;
+        _userService = userService;
     }
 
     [HttpDelete("cursos/delete-teacher/{CourseId:guid}/{ProfessorId:guid}")]
@@ -25,7 +25,7 @@ public class DeleteTeacherFromCourseController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

@@ -1,26 +1,20 @@
-using System;
 using Application.Interfaces.Admin;
-using Application.Services.Admin.TeacherService;
-using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.TeacherController;
-
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
 [Tags("Portal Admin")]
-
 public class GetAllCoursesTeacherController : ControllerBase
 {
     private readonly ITeacherServices _teacherService;
-    private readonly UserManager<User> _userManager;
+    private readonly IUserService _userService;
 
-    public GetAllCoursesTeacherController(ITeacherServices teacherService, UserManager<User> userManager)
+    public GetAllCoursesTeacherController(ITeacherServices teacherService, IUserService userService)
     {
-        _userManager = userManager;
+        _userService = userService;
         _teacherService = teacherService;
     }
 
@@ -30,7 +24,7 @@ public class GetAllCoursesTeacherController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

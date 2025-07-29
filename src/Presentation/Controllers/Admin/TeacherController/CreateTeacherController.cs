@@ -1,9 +1,6 @@
-using System;
 using Application.DTOs.Admin.Teacher;
 using Application.Interfaces.Admin;
-using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.TeacherController;
@@ -15,12 +12,11 @@ namespace InvictusAPI.Presentation.Controllers.Admin.TeacherController;
 public class CreateTeacherController : ControllerBase
 {
     private readonly ITeacherServices _teacherService;
-    private readonly UserManager<User> _userManager;
-
-    public CreateTeacherController(ITeacherServices teacherService, UserManager<User> userManager)
+    private readonly IUserService _userService;
+    public CreateTeacherController(ITeacherServices teacherService, IUserService userService)
     {
-        _userManager = userManager;
         _teacherService = teacherService;
+        _userService = userService;
     }
 
     [Authorize]
@@ -29,7 +25,7 @@ public class CreateTeacherController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

@@ -1,10 +1,7 @@
 using Application.Interfaces.Admin;
-using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.UserControllers;
-
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
@@ -13,10 +10,8 @@ namespace InvictusAPI.Presentation.Controllers.Admin.UserControllers;
 public class GetUserRegistrationsController : ControllerBase
 {
     private readonly IUserService _userService;
-    private readonly UserManager<User> _userManager;
-    public GetUserRegistrationsController(IUserService userService, UserManager<User> userManager)
+    public GetUserRegistrationsController(IUserService userService)
     {
-        _userManager = userManager;
         _userService = userService;
     }
 
@@ -26,13 +21,12 @@ public class GetUserRegistrationsController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;
 
-
-            var registrations = await _userService.GetUserRegistrationsByUserIdAsync(id);
+        var registrations = await _userService.GetUserRegistrationsByUserIdAsync(id);
             return Ok(registrations);
         }
         catch (Exception ex)

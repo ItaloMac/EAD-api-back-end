@@ -1,7 +1,4 @@
-using System;
 using Application.Interfaces.Admin;
-using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.ModuleControllers;
@@ -12,12 +9,12 @@ namespace InvictusAPI.Presentation.Controllers.Admin.ModuleControllers;
 public class AssignTeacherToModuleController : ControllerBase
 {
     private readonly IModuleService _moduleService;
-    private readonly UserManager<User> _userManager;
+    private readonly IUserService _userService;
 
-    public AssignTeacherToModuleController(IModuleService moduleService, UserManager<User> userManager)
+    public AssignTeacherToModuleController(IModuleService moduleService, IUserService userService)
     {
         _moduleService = moduleService;
-        _userManager = userManager;
+        _userService = userService;
     }
 
     [HttpPost("modulos/{moduleId:guid}/professor/{teacherId:guid}")]
@@ -25,6 +22,11 @@ public class AssignTeacherToModuleController : ControllerBase
     {
         try
         {
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
+
+            if (!autorizado)
+                return resultado;
+
             var result = await _moduleService.AssignTeacherToModuleAsync(moduleId, teacherId);
             if (result == null)
             {

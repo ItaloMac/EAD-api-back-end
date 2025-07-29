@@ -3,7 +3,6 @@ using Infrastucture;
 using Application.Services;
 using Microsoft.EntityFrameworkCore;
 using Application.Mappers;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi.Models;
 using Domain.Models;
 using Resend;
@@ -17,6 +16,10 @@ using Application.Services.Admin.TeacherService;
 using Application.Services.Admin.ClassService;
 using Application.Services.Admin.ModuleService;
 using Application.Services.Admin.AulaService;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using InvictusAPI.jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -40,15 +43,42 @@ var frontendUrl = builder.Configuration["Frontend:BaseUrl"]
     ?? throw new InvalidOperationException("Frontend URL not configured.");
 
 
+// JWT Settings
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+builder.Services.Configure<JwtSettings>(jwtSettings);
+
+var key = Encoding.UTF8.GetBytes(jwtSettings["SecretKey"]!);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+.AddJwtBearer(options =>
+{
+    options.RequireHttpsMetadata = false;
+    options.SaveToken = true;
+    options.TokenValidationParameters = new TokenValidationParameters
+    {
+        ValidateIssuerSigningKey = true,
+        IssuerSigningKey = new SymmetricSecurityKey(key),
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"]
+    };
+});
+
+builder.Services.AddAuthorization();
 // Configuração hierárquica (variáveis de ambiente > appsettings)
 builder.Services.Configure<EmailSettings>(options =>
 {
     options.FromEmail =
         Environment.GetEnvironmentVariable("EMAIL_FROM")
         ?? builder.Configuration["EmailSettings:FromEmail"]!; // Replace with a meaningful default value
-    
-    options.FromName = 
-        Environment.GetEnvironmentVariable("EMAIL_FROM_NAME") 
+
+    options.FromName =
+        Environment.GetEnvironmentVariable("EMAIL_FROM_NAME")
         ?? builder.Configuration["EmailSettings:FromName"]!;
 });
 
@@ -60,17 +90,6 @@ builder.Services.Configure<ResendClientOptions>( o =>
     o.ApiToken = Environment.GetEnvironmentVariable( "RESEND_API_KEY" )!;
 } );
 builder.Services.AddTransient<IResend, ResendClient>();
-
-// Configuração do Identity
-builder.Services.AddIdentityCore<User>(options =>
-{
-    options.SignIn.RequireConfirmedAccount = true;
-    options.User.RequireUniqueEmail = true;
-    options.Password.RequiredLength = 8;
-})
-.AddRoles<IdentityRole<Guid>>()
-.AddEntityFrameworkStores<ApplicationDbContext>()
-.AddApiEndpoints();
 
 // Configuração do Swagger
 builder.Services.AddEndpointsApiExplorer();
@@ -104,20 +123,8 @@ builder.Services.AddSwaggerGen(c =>
     });
 
     c.DocumentFilter<TagConfiguration>();
-
-    c.DocInclusionPredicate((docName, apiDesc) =>
-    {
-            // Remove endpoints relacionados ao Identity (ForgotPassword, ResetPassword, Register)
-            if (apiDesc.ActionDescriptor.EndpointMetadata.Any(em => 
-                em is Microsoft.AspNetCore.Identity.Data.ForgotPasswordRequest ||
-                em is Microsoft.AspNetCore.Identity.Data.ResetPasswordRequest ||
-                em is Microsoft.AspNetCore.Identity.Data.RegisterRequest))
-            {
-                return false; // Exclui do Swagger
-            }
-            return true; // Mantém outros endpoints
-    });
 });
+
 
 
 // Configuração do CORS
@@ -136,7 +143,6 @@ builder.Services.AddScoped<ICursoService, CursoService>();
 builder.Services.AddScoped<IProfessorService, ProfessorService>();
 builder.Services.AddScoped<IModuloService, ModuloService>();
 builder.Services.AddScoped<IContactService, ContactService>();
-builder.Services.AddScoped<IIdentityService, IdentityService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<ICourseServices, CourseService>();
 builder.Services.AddScoped<ITeacherServices, TeacherService>();
@@ -144,19 +150,8 @@ builder.Services.AddScoped<IClassServices, ClassService>();
 builder.Services.AddScoped<IRegistrationService, RegistrationServices>();
 builder.Services.AddScoped<IModuleService, ModuleService>();
 builder.Services.AddScoped<IAulasService, AulaService>();
-
-
-builder.Services
-    .AddAuthentication(options =>
-    {
-        options.DefaultAuthenticateScheme = IdentityConstants.BearerScheme;
-        options.DefaultChallengeScheme = IdentityConstants.BearerScheme;
-    })
-    .AddBearerToken(IdentityConstants.BearerScheme, options =>
-    {
-        options.BearerTokenExpiration = TimeSpan.FromHours(1);
-        options.RefreshTokenExpiration = TimeSpan.FromDays(7);
-    });
+builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<TokenService>();
 
 builder.Services.AddAuthorization();
 // Configuração do AutoMapper
@@ -175,9 +170,6 @@ app.UseSwaggerUI();
 
 // Configuração do tratamento de exceções e códigos de status
 app.UseMiddleware<ExceptionMiddleware>();
-
-// Mapeamento dos endpoints do Identity (DEPOIS de builder.Build())
-app.MapIdentityApi<User>();
 
 // Configuração de arquivos estáticos, roteamento, CORS, autenticação e autorização
 app.UseStaticFiles();

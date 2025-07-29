@@ -1,8 +1,5 @@
-using System;
 using Application.Interfaces.Admin;
-using Domain.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.TeacherController;
@@ -13,21 +10,21 @@ namespace InvictusAPI.Presentation.Controllers.Admin.TeacherController;
 public class GetAllModulesTeacherController : ControllerBase
 {
     private readonly ITeacherServices _teacherService;
-    private readonly UserManager<User> _userManager;
+    private readonly IUserService _userService;
 
-    public GetAllModulesTeacherController(ITeacherServices teacherService, UserManager<User> userManager)
+    public GetAllModulesTeacherController(ITeacherServices teacherService, IUserService userService)
     {
-        _userManager = userManager;
         _teacherService = teacherService;
+        _userService = userService;
     }
-
+ 
     [Authorize]
     [HttpGet("professores/{id:guid}/modulos")]
     public async Task<IActionResult> GetAllModulesCourseAsync(Guid id)
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

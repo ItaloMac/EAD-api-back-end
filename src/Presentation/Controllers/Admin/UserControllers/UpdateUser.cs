@@ -1,11 +1,8 @@
 using Application.DTOs.Admin.User;
 using Application.Interfaces.Admin;
-using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.UserControllers;
-
 [ApiController]
 [Route("api/admin")]
 [ApiExplorerSettings(GroupName = "v1")]
@@ -14,11 +11,9 @@ namespace InvictusAPI.Presentation.Controllers.Admin.UserControllers;
 public class UpdateUserController : Controller
 {
     private readonly IUserService _userService;
-    private readonly UserManager<User> _userManager;
 
-    public UpdateUserController (IUserService userService, UserManager<User> userManager)
+    public UpdateUserController (IUserService userService)
     {
-        _userManager = userManager;
         _userService = userService;
     }
 
@@ -28,7 +23,7 @@ public class UpdateUserController : Controller
 
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;
@@ -47,5 +42,4 @@ public class UpdateUserController : Controller
             return BadRequest($"Erro ao atualizar usuário: {message}");
         }
     }
-
 }

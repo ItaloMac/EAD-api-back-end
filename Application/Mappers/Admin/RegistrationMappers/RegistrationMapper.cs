@@ -37,7 +37,7 @@ public class RegistrationProfile : Profile
         CreateMap<User, StudentDTO>()
             .ForMember(dest => dest.Name, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.LastName))
-            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.UserName))
+            .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.Name))
             .ForMember(dest => dest.CPF, opt => opt.MapFrom(src => src.CPF))
             .ForMember(dest => dest.PhoneNumber, opt => opt.MapFrom(src => src.PhoneNumber));
         

@@ -1,7 +1,4 @@
-using System;
 using Application.Interfaces.Admin;
-using Domain.Models;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace InvictusAPI.Presentation.Controllers.Admin.ModuleControllers;
@@ -12,12 +9,12 @@ namespace InvictusAPI.Presentation.Controllers.Admin.ModuleControllers;
 public class GetModuleByIdController : ControllerBase
 {
     private readonly IModuleService _moduleService;
-    private readonly UserManager<User> _userManager;
+    private readonly IUserService _userService;
 
-    public GetModuleByIdController(IModuleService moduleService, UserManager<User> userManager)
+    public GetModuleByIdController(IModuleService moduleService, IUserService userService)
     {
         _moduleService = moduleService;
-        _userManager = userManager;
+        _userService = userService;
     }
 
     [HttpGet("modulos/{id:guid}")]
@@ -25,7 +22,7 @@ public class GetModuleByIdController : ControllerBase
     {
         try
         {
-            var (autorizado, resultado) = await new AuthAdmin(_userManager).ValidarAdminAsync(User);
+            var (autorizado, resultado) = await new AuthAdmin(_userService).ValidarAdminAsync(User);
 
             if (!autorizado)
                 return resultado;

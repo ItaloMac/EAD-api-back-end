@@ -17,7 +17,7 @@ public class UserProfile : Profile
                     src.BirthDate.Value.ToString("dd-MM-yyyy") : null));
 
         CreateMap<UserCreateDTO, User>()
-            .ForMember(dest => dest.UserName, option => option.MapFrom(src => src.Email));
+            .ForMember(dest => dest.Name, option => option.MapFrom(src => src.Email));
 
         CreateMap<UserUpdateDTO, User>()
             .ForAllMembers(options => options.Condition((src, dest, srcMember) => srcMember != null));
