@@ -12,5 +12,8 @@ public interface IApplicationDbContext
     DbSet<Modulo> Modulos { get; set; }
     DbSet<CursoProfessor> CursoProfessores { get ; set; }
     DbSet<Contact> Contacts { get; set; }
+    DbSet<Registration> Registrations { get; set; }
+    DbSet<Class> Classes { get; set; }
+    DbSet<User> Users { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

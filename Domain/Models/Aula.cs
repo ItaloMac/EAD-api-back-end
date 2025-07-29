@@ -18,6 +18,7 @@ public class Aula
     public required string Classroom { get; set; } = null!;
 
     // Relacionamento 1:N - Uma Aula pertence a um Módulo
-    public Guid Id_Modulo { get; set; }
+    public Guid ModuloId { get; set; }
+
     public Modulo Modulo { get; set; } = null!;
 }
