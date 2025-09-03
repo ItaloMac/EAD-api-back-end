@@ -1,4 +1,4 @@
-using System;
+using System.Globalization;
 using Application.DTOs.Admin.Class;
 using Application.Interfaces;
 using Application.Interfaces.Admin;
@@ -24,7 +24,7 @@ public class ClassService : IClassServices
     {
         try
         {
-            var registrationIds = dto.RelatedRegistrations.Select(r => r.Id).ToList();
+            var registrationIds = dto.RelacionedRegistrations.Select(r => r.Id).ToList();
             var registrations = await _context.Registrations
                 .Where(r => registrationIds.Contains(r.Id))
                 .ToListAsync();
@@ -32,9 +32,9 @@ public class ClassService : IClassServices
             var newClass = new Class
             {
                 Name = dto.Name,
-                StartDate = dto.StartDate,
-                EndDate = dto.EndDate,
-                CursoId = dto.RelatedCourse.Id,
+                StartDate = DateTime.ParseExact(dto.StartDate, "dd-MM-yyyy", CultureInfo.InvariantCulture),
+                EndDate = DateTime.ParseExact(dto.EndDate, "dd-MM-yyyy", CultureInfo.InvariantCulture),
+                CursoId = dto.RelacionedCourse.Id,
                 Registrations = registrations
             };
 
@@ -116,17 +116,16 @@ public class ClassService : IClassServices
                 throw new ApplicationException("Turma não encontrada.");
             }
 
-            var registrationIds = dto.RelatedRegistrations.Select(r => r.Id).ToList();
+            var registrationIds = dto.RelacionedRegistrations.Select(r => r.Id).ToList();
             var registrations = await _context.Registrations
                 .Where(r => registrationIds.Contains(r.Id))
                 .ToListAsync();
 
             classExisting.Name = dto.Name;
-            classExisting.StartDate = dto.StartDate;
-            classExisting.EndDate = dto.EndDate;
-            classExisting.CursoId= dto.RelatedCourse.Id;
+            classExisting.StartDate = DateTime.ParseExact(dto.StartDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            classExisting.EndDate = DateTime.ParseExact(dto.EndDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            classExisting.CursoId= dto.RelacionedCourse.Id;
             classExisting.Registrations = registrations;
-
             _context.Classes.Update(classExisting);
             await _context.SaveChangesAsync();
             return _mapper.Map<CreateClassDTO>(classExisting);

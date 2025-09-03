@@ -78,6 +78,11 @@ namespace Infrastucture.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(200)");
 
+                    b.Property<string>("VideoUrl")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("longtext")
+                        .HasDefaultValue("");
+
                     b.HasKey("Id");
 
                     b.HasIndex("ModuloId");
@@ -332,10 +337,6 @@ namespace Infrastucture.Migrations
                     b.Property<string>("Duration")
                         .IsRequired()
                         .HasColumnType("varchar(500)");
-
-                    b.Property<string>("Faculty")
-                        .IsRequired()
-                        .HasColumnType("longtext");
 
                     b.Property<string>("FullPrice")
                         .IsRequired()

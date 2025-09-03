@@ -16,7 +16,6 @@ public bool Status { get; set; }
     public required string Proposal { get; set; }
     public required string Requirements { get; set; }
     public required string Documentation { get; set; }
-    public required string Faculty { get; set; }
     public required string Curriculum { get; set; }
     public required string RegistrationPrice { get; set; }
     public required string MonthlyPrice { get; set; }
@@ -26,5 +25,5 @@ public bool Status { get; set; }
     public required string FullPrice { get; set; }
     public string Discount { get; set; } = null!;
     public string ImagemUrl { get; set; } = null!;
-    public Coordenador Coordenador { get; set; } = null!;
+    public Guid CoordenadorId { get; set; }
 }

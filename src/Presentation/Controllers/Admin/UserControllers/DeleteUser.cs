@@ -14,7 +14,7 @@ public class DeleteUserController : ControllerBase
 {
     private readonly IUserService _userService;
 
-    public DeleteUserController(IUserService userService, UserManager<User> userManager)
+    public DeleteUserController(IUserService userService)
     {
         _userService = userService;
     }

@@ -119,6 +119,7 @@ public class UserService : Interfaces.Admin.IUserService
             existingUser.VindiCustomerId = user.VindiCustomerId;
 
             var result = _context.Users.Update(existingUser);
+
             await _context.SaveChangesAsync();
 
             return await Task.FromResult(_mapper.Map<UserResponseDTO>(existingUser));

@@ -17,4 +17,5 @@ public class UserResponseDTO
     public string? ProfilePhoto { get; set; }
     public UserType? UserType { get; set; }
     public string? VindiCustomerId { get; set; }
+    public string? AddressId { get; set; }
 }

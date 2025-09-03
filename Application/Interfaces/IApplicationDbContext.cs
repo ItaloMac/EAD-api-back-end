@@ -15,5 +15,6 @@ public interface IApplicationDbContext
     DbSet<Registration> Registrations { get; set; }
     DbSet<Class> Classes { get; set; }
     DbSet<User> Users { get; set; }
+    DbSet<Address> Addresses { get; set; }
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }

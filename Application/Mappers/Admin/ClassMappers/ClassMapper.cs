@@ -22,11 +22,11 @@ public class ClassProfile : Profile
             ));
 
         CreateMap<Class, CreateClassDTO>()
-    .ForMember(dest => dest.RelatedCourse, opt => opt.MapFrom(src => new RelatedCourseDTO
+    .ForMember(dest => dest.RelacionedCourse, opt => opt.MapFrom(src => new RelatedCourseDTO
     {
         Id = src.Curso!.Id
     }))
-    .ForMember(dest => dest.RelatedRegistrations, opt => opt.MapFrom(src =>
+    .ForMember(dest => dest.RelacionedRegistrations, opt => opt.MapFrom(src =>
         src.Registrations.Select(r => new RelatedRegistrationDTO
         {
             Id = r.Id

@@ -21,7 +21,7 @@ public class UpdateAulaController : ControllerBase
 
     [Authorize]
     [HttpPut("aulas/{id:guid}/update")]
-    public async Task<IActionResult> UpdateAulaAsync(Guid id, [FromBody] CreateAulaDTO aula)
+    public async Task<IActionResult> UpdateAulaAsync(Guid id, [FromBody] UpdateAulaDTO aula)
     {
         try
         {

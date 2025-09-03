@@ -45,9 +45,6 @@ namespace webAPI.Domain.Models {
         public required string Documentation { get ; set; }
 
         [Column(TypeName = "longtext")]
-        public required string Faculty { get ; set; }
-
-        [Column(TypeName = "longtext")]
         public required string Curriculum { get ; set; }
 
         [Column(TypeName = "varchar(64)")]
@@ -85,6 +82,5 @@ namespace webAPI.Domain.Models {
         public Professor Coordenador { get; set; } = null!;
 
         public List<CursoProfessor> CursoProfessores { get; set; } = new();
-
     }
 }

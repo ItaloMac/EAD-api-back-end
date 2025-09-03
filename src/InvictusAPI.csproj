@@ -27,4 +27,8 @@
     <ProjectReference Include="../Infrastucture/Infrastucture.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Presentation/Controllers/Admin/AddressController/" />
+  </ItemGroup>
+
 </Project>

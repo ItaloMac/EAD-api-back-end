@@ -8,16 +8,12 @@ public class CreateClassDTO
 {
     [Column(TypeName = "varchar(64)")]
     public required string Name { get; set; }
+    public required string StartDate { get; set; }
+    public required string EndDate { get; set; }
 
-    [DataType(DataType.Date)]
-    public required DateTime StartDate { get; set; }
+    public RelatedCourseDTO RelacionedCourse { get; set; } = null!;
 
-    [DataType(DataType.Date)]
-    public required DateTime EndDate { get; set; }
-
-    public RelatedCourseDTO RelatedCourse { get; set; } = null!;
-
-    public List<RelatedRegistrationDTO> RelatedRegistrations { get; set; } = new();
+    public List<RelatedRegistrationDTO> RelacionedRegistrations { get; set; } = new();
 }
 
 public class RelatedCourseDTO

@@ -120,6 +120,7 @@ public class TeacherService : ITeacherServices
             Where(cp => cp.Id_Professor == id)
             .Select(cp => new TeacherModulesDTO
             {
+                Id = cp.Id,
                 Theme = cp.Theme,
                 StartDate = cp.StartDate,
                 EndDate = cp.EndDate

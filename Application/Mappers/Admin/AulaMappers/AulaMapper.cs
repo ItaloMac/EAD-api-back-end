@@ -9,16 +9,19 @@ public class AulaMapper : Profile
     public AulaMapper()
     {
         CreateMap<Domain.Models.Aula, AulaResponseDTO>()
-            .ForMember(dest => dest.Modulo, opt => opt.MapFrom(src => new ModuloDTOAula
-            {
-                Id = src.ModuloId,
-                Theme = src.Modulo.Theme
-            }));
+            .ForMember(dest => dest.ModuloId, opt => opt.MapFrom(src =>  src.ModuloId));
+           
 
         CreateMap<CreateAulaDTO, Domain.Models.Aula>()
             .ForMember(dest => dest.ModuloId, opt => opt.MapFrom(src => src.ModuloId));
 
         CreateMap<Domain.Models.Aula, CreateAulaDTO>()
+            .ForMember(dest => dest.ModuloId, opt => opt.MapFrom(src => src.ModuloId));
+        
+        CreateMap<UpdateAulaDTO, Domain.Models.Aula>()
+            .ForMember(dest => dest.ModuloId, opt => opt.MapFrom(src => src.ModuloId));
+
+        CreateMap<Domain.Models.Aula, UpdateAulaDTO>()
             .ForMember(dest => dest.ModuloId, opt => opt.MapFrom(src => src.ModuloId));
    }
 }

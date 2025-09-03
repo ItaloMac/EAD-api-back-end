@@ -69,5 +69,12 @@ public class ApplicationDbContext : DbContext, IApplicationDbContext
              .HasDefaultValue(UserType.Aluno) // Valor padrão explícito
              .HasConversion<int>() // Converte para int no banco
              .HasSentinel((UserType)(-1)); // Valor sentinela que nunca será usado
+
+         modelBuilder.Entity<Aula>(entity =>
+        {
+        entity.Property(e => e.VideoUrl)
+            .HasDefaultValue("");
+        });
+        
     }
 }

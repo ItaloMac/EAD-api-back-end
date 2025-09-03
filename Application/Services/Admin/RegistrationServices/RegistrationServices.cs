@@ -1,3 +1,4 @@
+using System.Globalization;
 using Application.DTOs.Admin.Registration;
 using Application.Interfaces;
 using Application.Interfaces.Admin;
@@ -67,8 +68,10 @@ public class RegistrationServices : IRegistrationService
             var NewRegistration = new Registration
             {
                 RegistrationStatus = dto.RegistrationStatus,
-                RegistrationDate = dto.RegistrationDate,
-                CancellationDate = dto.CancellationDate,
+                RegistrationDate = DateTime.ParseExact(dto.RegistrationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture),
+                CancellationDate = string.IsNullOrWhiteSpace(dto.CancellationDate) 
+                    ? null 
+                    : DateTime.ParseExact(dto.CancellationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture),
                 ClassId = dto.Class.Id,
                 UserId = dto.User.Id,
                 VindiPlanId = dto.VindiPlanId
@@ -96,8 +99,10 @@ public class RegistrationServices : IRegistrationService
             }
 
             registrationExisting.RegistrationStatus = registrationDTO.RegistrationStatus;
-            registrationExisting.RegistrationDate = registrationDTO.RegistrationDate;
-            registrationExisting.CancellationDate = registrationDTO.CancellationDate;
+            registrationExisting.RegistrationDate = DateTime.ParseExact(registrationDTO.RegistrationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
+            registrationExisting.CancellationDate = string.IsNullOrWhiteSpace(registrationDTO.CancellationDate)
+                ? null
+                : DateTime.ParseExact(registrationDTO.CancellationDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
             registrationExisting.ClassId = registrationDTO.Class.Id;
             registrationExisting.UserId = registrationDTO.User.Id;
 

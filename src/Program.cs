@@ -20,6 +20,10 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using InvictusAPI.jwt;
+using Application.Services.Admin.AddressService;
+using Infrastucture.Services.Vimeo;
+using Application.Interfaces.Admin.GatewayInterface;
+using Infrastucture.Services.Gateway.CustomerGateway;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -130,10 +134,10 @@ builder.Services.AddSwaggerGen(c =>
 // Configuração do CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("FrontendPolicy", policy => 
+    options.AddPolicy("FrontendPolicy", policy =>
     {
         policy.WithOrigins(frontendUrl)
-              .WithMethods("GET", "POST", "PUT", "DELETE")
+              .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH")
               .WithHeaders("Content-Type", "Authorization");
     });
 });
@@ -151,7 +155,11 @@ builder.Services.AddScoped<IRegistrationService, RegistrationServices>();
 builder.Services.AddScoped<IModuleService, ModuleService>();
 builder.Services.AddScoped<IAulasService, AulaService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<VimeoAuthService>();
+builder.Services.AddScoped<ICustomerGateway, CustomerGatewayService>();
+builder.Services.AddScoped<Application.Services.Admin.GatewayService.GatewayService>();
 
 builder.Services.AddAuthorization();
 // Configuração do AutoMapper
