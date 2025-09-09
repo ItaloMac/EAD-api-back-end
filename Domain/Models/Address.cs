@@ -12,8 +12,7 @@ public class Address
     [Column(TypeName = "varchar(64)")]
     public required string Road { get; set; }
 
-    [Column(TypeName = "varchar(20)")]
-    public required string Number { get; set; }
+    public required int Number { get; set; }
 
     [Column(TypeName = "varchar(64)")]
     public required string Neighborhood { get; set; }

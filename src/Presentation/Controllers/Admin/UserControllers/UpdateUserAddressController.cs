@@ -1,4 +1,3 @@
-using System;
 using Application.DTOs.Admin.User;
 using Application.Interfaces.Admin;
 using Infrastucture;
@@ -8,9 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace InvictusAPI.Presentation.Controllers.Admin.UserControllers;
 
 [ApiController]
-[Route("api/admin")]
-[ApiExplorerSettings(GroupName = "v1")]
-[Tags("Portal Admin")]
+[Authorize]
 public class UpdateUserAddressController : ControllerBase
 {
     private readonly IUserService _userService;

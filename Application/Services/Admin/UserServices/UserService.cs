@@ -116,7 +116,7 @@ public class UserService : Interfaces.Admin.IUserService
                 : DateTime.ParseExact(user.BirthDate, "dd-MM-yyyy", CultureInfo.InvariantCulture);
             existingUser.ProfilePhoto = user.ProfilePhoto;
             existingUser.UserType = user.UserType ?? existingUser.UserType;
-            existingUser.VindiCustomerId = user.VindiCustomerId;
+            existingUser.CustomerId = user.CustomerId;
 
             var result = _context.Users.Update(existingUser);
 

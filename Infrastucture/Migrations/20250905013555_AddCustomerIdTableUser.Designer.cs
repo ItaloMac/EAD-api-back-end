@@ -4,6 +4,7 @@ using Infrastucture;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastucture.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250905013555_AddCustomerIdTableUser")]
+    partial class AddCustomerIdTableUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -40,8 +43,9 @@ namespace Infrastucture.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(64)");
 
-                    b.Property<int>("Number")
-                        .HasColumnType("int");
+                    b.Property<string>("Number")
+                        .IsRequired()
+                        .HasColumnType("varchar(20)");
 
                     b.Property<string>("Road")
                         .IsRequired()
@@ -314,8 +318,9 @@ namespace Infrastucture.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<decimal>("CashPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("CashPrice")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
 
                     b.Property<Guid>("CoordenadorId")
                         .HasColumnType("char(36)");
@@ -336,15 +341,17 @@ namespace Infrastucture.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(500)");
 
-                    b.Property<decimal>("FullPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("FullPrice")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("ImagemUrl")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<decimal>("Installments")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("Installments")
+                        .IsRequired()
+                        .HasColumnType("varchar(50)");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -354,8 +361,9 @@ namespace Infrastucture.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<decimal>("MonthlyPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("MonthlyPrice")
+                        .IsRequired()
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -384,8 +392,9 @@ namespace Infrastucture.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<decimal>("TotalPrice")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<string>("TotalPrice")
+                        .IsRequired()
+                        .HasColumnType("varchar(64)");
 
                     b.Property<string>("Type")
                         .IsRequired()

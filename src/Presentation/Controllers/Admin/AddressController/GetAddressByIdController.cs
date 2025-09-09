@@ -6,9 +6,9 @@ using Microsoft.AspNetCore.Mvc;
 namespace Presentation.Controllers.Admin.AddressController;
 
 [ApiController]
-[Route("api/admin/address")]
-[ApiExplorerSettings(GroupName = "v1")]
-[Tags("Portal Admin")]
+[Route("api/address")]
+[Authorize]
+
 public class GetAddressByIdController : ControllerBase
 {
     private readonly IAddressService _addressService;

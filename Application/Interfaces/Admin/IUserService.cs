@@ -1,4 +1,3 @@
-
 using Application.DTOs.Admin.User;
 
 namespace Application.Interfaces.Admin;

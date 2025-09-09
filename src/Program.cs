@@ -22,8 +22,10 @@ using Microsoft.IdentityModel.Tokens;
 using InvictusAPI.jwt;
 using Application.Services.Admin.AddressService;
 using Infrastucture.Services.Vimeo;
+using Application.Services.Admin.GatewayService;
 using Application.Interfaces.Admin.GatewayInterface;
-using Infrastucture.Services.Gateway.CustomerGateway;
+using Infrastucture.Services.Gateway;
+using Infrastucture.Services.ViaCep;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -157,9 +159,14 @@ builder.Services.AddScoped<IAulasService, AulaService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<TokenService>();
-builder.Services.AddScoped<VimeoAuthService>();
-builder.Services.AddScoped<ICustomerGateway, CustomerGatewayService>();
-builder.Services.AddScoped<Application.Services.Admin.GatewayService.GatewayService>();
+builder.Services.AddScoped<ConsultaViaCepService>();
+
+// ✅ INJEÇÃO DOS SERVIÇOS (sem AsaasSettings class)
+builder.Services.AddScoped<ICheckoutGateway, AsaasCheckoutGateway>();
+builder.Services.AddScoped<CheckoutService>();
+
+
+
 
 builder.Services.AddAuthorization();
 // Configuração do AutoMapper

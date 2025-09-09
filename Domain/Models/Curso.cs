@@ -50,20 +50,21 @@ namespace webAPI.Domain.Models {
         [Column(TypeName = "varchar(64)")]
         public required string RegistrationPrice { get ; set; }
 
-        [Column(TypeName = "varchar(64)")]
-        public required string MonthlyPrice { get ; set; }
+       [Column(TypeName = "decimal(18,2)")]
+        public decimal MonthlyPrice { get; set; }
 
-        [Column(TypeName = "varchar(64)")]
-        public required string TotalPrice { get ; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal TotalPrice { get; set; }
 
-        [Column(TypeName = "varchar(50)")]
-        public required string Installments { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Installments { get; set; }
 
-        [Column(TypeName = "varchar(50)")]
-        public required string CashPrice { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal CashPrice { get; set; }
 
-        [Column(TypeName = "varchar(50)")]
-        public required string FullPrice { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal FullPrice { get; set; }
+
 
         [Column(TypeName = "varchar(50)")]
         public string Discount { get; set; } = null!;

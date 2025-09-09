@@ -1,5 +1,3 @@
-using System;
-using Application.DTOs.Admin.Course;
 using Application.DTOs.Admin.Teacher;
 
 namespace Application.Interfaces.Admin;

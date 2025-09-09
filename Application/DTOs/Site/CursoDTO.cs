@@ -17,11 +17,11 @@ public class CursoDTO
     public required string Documentation { get ; set; }
     public required string Curriculum { get ; set; }
     public required string RegistrationPrice { get ; set; }
-    public required string MonthlyPrice { get ; set; }
-    public required string TotalPrice { get ; set; }
-    public required string Installments { get; set; }
-    public required string CashPrice { get; set; }
-    public required string FullPrice { get; set; }
+    public required decimal MonthlyPrice { get ; set; }
+    public required decimal TotalPrice { get ; set; }
+    public required decimal Installments { get; set; }
+    public required decimal CashPrice { get; set; }
+    public required decimal FullPrice { get; set; }
     public string Discount { get; set; } = null!;
     public required string ImagemURL { get; set;}
 }
