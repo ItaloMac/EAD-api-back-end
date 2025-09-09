@@ -17,6 +17,8 @@ public class Aula
     [Column(TypeName = "varchar(200)")]
     public required string Classroom { get; set; } = null!;
 
+    public string? VideoUrl { get; set; }
+
     // Relacionamento 1:N - Uma Aula pertence a um Módulo
     public Guid ModuloId { get; set; }
 

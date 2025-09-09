@@ -45,28 +45,26 @@ namespace webAPI.Domain.Models {
         public required string Documentation { get ; set; }
 
         [Column(TypeName = "longtext")]
-        public required string Faculty { get ; set; }
-
-        [Column(TypeName = "longtext")]
         public required string Curriculum { get ; set; }
 
         [Column(TypeName = "varchar(64)")]
         public required string RegistrationPrice { get ; set; }
 
-        [Column(TypeName = "varchar(64)")]
-        public required string MonthlyPrice { get ; set; }
+       [Column(TypeName = "decimal(18,2)")]
+        public decimal MonthlyPrice { get; set; }
 
-        [Column(TypeName = "varchar(64)")]
-        public required string TotalPrice { get ; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal TotalPrice { get; set; }
 
-        [Column(TypeName = "varchar(50)")]
-        public required string Installments { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Installments { get; set; }
 
-        [Column(TypeName = "varchar(50)")]
-        public required string CashPrice { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal CashPrice { get; set; }
 
-        [Column(TypeName = "varchar(50)")]
-        public required string FullPrice { get; set; }
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal FullPrice { get; set; }
+
 
         [Column(TypeName = "varchar(50)")]
         public string Discount { get; set; } = null!;
@@ -85,6 +83,5 @@ namespace webAPI.Domain.Models {
         public Professor Coordenador { get; set; } = null!;
 
         public List<CursoProfessor> CursoProfessores { get; set; } = new();
-
     }
 }

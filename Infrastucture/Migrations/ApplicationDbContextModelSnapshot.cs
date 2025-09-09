@@ -40,9 +40,8 @@ namespace Infrastucture.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(64)");
 
-                    b.Property<string>("Number")
-                        .IsRequired()
-                        .HasColumnType("varchar(20)");
+                    b.Property<int>("Number")
+                        .HasColumnType("int");
 
                     b.Property<string>("Road")
                         .IsRequired()
@@ -77,6 +76,11 @@ namespace Infrastucture.Migrations
                     b.Property<string>("Theme")
                         .IsRequired()
                         .HasColumnType("varchar(200)");
+
+                    b.Property<string>("VideoUrl")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("longtext")
+                        .HasDefaultValue("");
 
                     b.HasKey("Id");
 
@@ -262,6 +266,9 @@ namespace Infrastucture.Migrations
                     b.Property<string>("CPF")
                         .HasColumnType("varchar(255)");
 
+                    b.Property<string>("CustomerId")
+                        .HasColumnType("longtext");
+
                     b.Property<string>("Email")
                         .HasColumnType("varchar(255)");
 
@@ -288,9 +295,6 @@ namespace Infrastucture.Migrations
                         .HasColumnType("int")
                         .HasDefaultValue(1);
 
-                    b.Property<string>("VindiCustomerId")
-                        .HasColumnType("longtext");
-
                     b.HasKey("Id");
 
                     b.HasIndex("AddressId");
@@ -310,9 +314,8 @@ namespace Infrastucture.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("char(36)");
 
-                    b.Property<string>("CashPrice")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                    b.Property<decimal>("CashPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<Guid>("CoordenadorId")
                         .HasColumnType("char(36)");
@@ -333,21 +336,15 @@ namespace Infrastucture.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(500)");
 
-                    b.Property<string>("Faculty")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("FullPrice")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                    b.Property<decimal>("FullPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("ImagemUrl")
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("Installments")
-                        .IsRequired()
-                        .HasColumnType("varchar(50)");
+                    b.Property<decimal>("Installments")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Location")
                         .IsRequired()
@@ -357,9 +354,8 @@ namespace Infrastucture.Migrations
                         .IsRequired()
                         .HasColumnType("varchar(50)");
 
-                    b.Property<string>("MonthlyPrice")
-                        .IsRequired()
-                        .HasColumnType("varchar(64)");
+                    b.Property<decimal>("MonthlyPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -388,9 +384,8 @@ namespace Infrastucture.Migrations
                     b.Property<bool>("Status")
                         .HasColumnType("tinyint(1)");
 
-                    b.Property<string>("TotalPrice")
-                        .IsRequired()
-                        .HasColumnType("varchar(64)");
+                    b.Property<decimal>("TotalPrice")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("Type")
                         .IsRequired()

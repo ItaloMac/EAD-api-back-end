@@ -1,5 +1,4 @@
 using Application.DTOs.Admin.Registration;
-using Domain.Models;
 
 namespace Application.Interfaces.Admin;
 

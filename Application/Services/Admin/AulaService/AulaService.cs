@@ -71,7 +71,7 @@ public class AulaService : IAulasService
         }
     }
 
-    public async Task<CreateAulaDTO> UpdateAulaAsync(Guid id, CreateAulaDTO updateAulaDTO)
+    public async Task<UpdateAulaDTO> UpdateAulaAsync(Guid id, UpdateAulaDTO updateAulaDTO)
     {
         try
         {
@@ -85,7 +85,7 @@ public class AulaService : IAulasService
             _context.Aulas.Update(aula);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<CreateAulaDTO>(aula);
+            return _mapper.Map<UpdateAulaDTO>(aula);
         }
         catch (Exception ex)
         {

@@ -14,7 +14,7 @@ public class User
     public string? ProfilePhoto { get; set; }
     public string? Password { get; set; }
     public UserType UserType { get; set; } = UserType.Aluno;
-    public string? VindiCustomerId { get; set; }
+    public string? CustomerId { get; set; }
     public bool EmailConfirmed { get; set; } = false;
 
     [ForeignKey("Address")]

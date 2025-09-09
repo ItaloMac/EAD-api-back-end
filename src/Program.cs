@@ -20,6 +20,12 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using InvictusAPI.jwt;
+using Application.Services.Admin.AddressService;
+using Infrastucture.Services.Vimeo;
+using Application.Services.Admin.GatewayService;
+using Application.Interfaces.Admin.GatewayInterface;
+using Infrastucture.Services.Gateway;
+using Infrastucture.Services.ViaCep;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -130,10 +136,10 @@ builder.Services.AddSwaggerGen(c =>
 // Configuração do CORS
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("FrontendPolicy", policy => 
+    options.AddPolicy("FrontendPolicy", policy =>
     {
         policy.WithOrigins(frontendUrl)
-              .WithMethods("GET", "POST", "PUT", "DELETE")
+              .WithMethods("GET", "POST", "PUT", "DELETE", "PATCH")
               .WithHeaders("Content-Type", "Authorization");
     });
 });
@@ -151,7 +157,16 @@ builder.Services.AddScoped<IRegistrationService, RegistrationServices>();
 builder.Services.AddScoped<IModuleService, ModuleService>();
 builder.Services.AddScoped<IAulasService, AulaService>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<TokenService>();
+builder.Services.AddScoped<ConsultaViaCepService>();
+
+// ✅ INJEÇÃO DOS SERVIÇOS (sem AsaasSettings class)
+builder.Services.AddScoped<ICheckoutGateway, AsaasCheckoutGateway>();
+builder.Services.AddScoped<CheckoutService>();
+
+
+
 
 builder.Services.AddAuthorization();
 // Configuração do AutoMapper

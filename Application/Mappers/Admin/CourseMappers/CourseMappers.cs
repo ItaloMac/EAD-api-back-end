@@ -16,16 +16,16 @@ public class CourseProfile : Profile
         CreateMap<Professor, CoordenadorCourse>();
 
         CreateMap<CreateCourseDTO, Curso>()
-        .ForMember(dest => dest.CoordenadorId, opt => opt.MapFrom(src => src.Coordenador.Id));
+        .ForMember(dest => dest.CoordenadorId, opt => opt.MapFrom(src => src.CoordenadorId));
 
         CreateMap<Curso, CreateCourseDTO>()
-        .ForMember(dest => dest.Coordenador, opt => opt.MapFrom(src => new CoordenadorCourse { Id = src.Coordenador.Id }));
+        .ForMember(dest => dest.CoordenadorId, opt => opt.MapFrom(src => new CoordenadorCourse { Id = src.Coordenador.Id }));
 
         CreateMap<UpdateCourseDTO, Curso>()
-        .ForMember(dest => dest.CoordenadorId, opt => opt.MapFrom(src => src.Coordenador.Id));
+        .ForMember(dest => dest.CoordenadorId, opt => opt.MapFrom(src => src.CoordenadorId));
 
         CreateMap<Curso, UpdateCourseDTO>()
-        .ForMember(dest => dest.Coordenador, opt => opt.MapFrom(src => new CoordenadorCourse { Id = src.Coordenador.Id }));
+        .ForMember(dest => dest.CoordenadorId, opt => opt.MapFrom(src => new CoordenadorCourse { Id = src.Coordenador.Id }));
 
         CreateMap<CursoProfessor, CourseTeacherDTO>();
         CreateMap<CourseTeacherDTO, CursoProfessor>();

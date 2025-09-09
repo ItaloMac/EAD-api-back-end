@@ -103,7 +103,6 @@ public class CourseService : ICourseServices
                 Proposal = dto.Proposal,
                 Requirements = dto.Requirements,
                 Documentation = dto.Documentation,
-                Faculty = dto.Faculty,
                 Curriculum = dto.Curriculum,
                 RegistrationPrice = dto.RegistrationPrice,
                 MonthlyPrice = dto.MonthlyPrice,
@@ -113,7 +112,7 @@ public class CourseService : ICourseServices
                 FullPrice = dto.FullPrice,
                 Discount = dto.Discount,
                 ImagemUrl = dto.ImagemUrl,
-                CoordenadorId = dto.Coordenador.Id
+                CoordenadorId = dto.CoordenadorId
             };
             _context.Cursos.Add(newCourse);
             await _context.SaveChangesAsync();
@@ -240,6 +239,7 @@ public class CourseService : ICourseServices
             Where(cp => cp.Id_Curso == CursoId)
             .Select(cp => new CourseTeacherResponseDTO
             {
+                Id = cp.Professor.Id,
                 Name = cp.Professor.Name,
                 MiniResume = cp.Professor.MiniResume,
                 ImagemUrl = cp.Professor.ImagemUrl
@@ -277,7 +277,6 @@ public class CourseService : ICourseServices
             courseExisting.Proposal = dto.Proposal;
             courseExisting.Requirements = dto.Requirements;
             courseExisting.Documentation = dto.Documentation;
-            courseExisting.Faculty = dto.Faculty;
             courseExisting.Curriculum = dto.Curriculum;
             courseExisting.RegistrationPrice = dto.RegistrationPrice;
             courseExisting.MonthlyPrice = dto.MonthlyPrice;
@@ -287,7 +286,7 @@ public class CourseService : ICourseServices
             courseExisting.FullPrice = dto.FullPrice;
             courseExisting.Discount = dto.Discount;
             courseExisting.ImagemUrl = dto.ImagemUrl;
-            courseExisting.CoordenadorId = dto.Coordenador.Id;
+            courseExisting.CoordenadorId = dto.CoordenadorId;
 
             _context.Cursos.Update(courseExisting);
             await _context.SaveChangesAsync();

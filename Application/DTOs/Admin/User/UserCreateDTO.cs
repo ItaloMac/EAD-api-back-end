@@ -14,5 +14,5 @@ public class UserCreateDTO
     public string? BirthDate { get; set; }
     public string? ProfilePhoto { get; set; }
     public UserType UserType { get; set; } = UserType.Aluno;
-    public string? VindiCustomerId { get; set; }
+    public string? CustomerId { get; set; }
 }
