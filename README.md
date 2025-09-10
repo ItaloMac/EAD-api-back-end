@@ -1,20 +1,40 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+Sistema EAD - Back-end
 
-# Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+Este repositório contém o back-end do sistema de Ensino a Distância (EAD), desenvolvido em .NET 8.0.
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+Tecnologias utilizadas
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+- .NET 8.0
+- Entity Framework Core
+- ASP.NET Core Web API
+- Swagger (documentação da API)
+- JWT (autenticação)
+- MySql
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://docs.microsoft.com/en-us/azure/devops/repos/git/create-a-readme?view=azure-devops). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+Estrutura do Projeto:
+
+Application/      
+Domain/           
+Infrastructure/  
+InvictusAPI/
+ └── .sln  
+ └── Controllers.sln
+ └── Program.cs
+ ....
+
+⚡ Funcionalidades principais
+
+1. Cadastro e autenticação de usuários (alunos e administradores)
+2. Gestão de cursos, modulos, aulas, matriculas, turmas e alunos.
+3. Área administrativa (acesso autenticado)
+4. Gateway de pagamento (atualmente configurado com Sandbox Asaas)
+5. Portal do aluno (em desenvolvimento)
+6. Upload de arquivos, fotos e videos.
+7. Site institucional
+
+Serviços Externos
+1. Resend (envio de email)
+2. Upload de fotos (Cloudnary)
+3. Upload de videos (Vimeo)
+4. Gateway de pagamento (Asaas)
+5. Viacep
